@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "openbackup",
+  "name": "OpenBackup",
+  "description": "Backup mod for MinecraftForge.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["LotuxPunk"],
+  "credits": "",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
