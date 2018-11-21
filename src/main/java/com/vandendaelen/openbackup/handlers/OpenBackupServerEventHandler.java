@@ -21,7 +21,13 @@ public class OpenBackupServerEventHandler {
             countDown++;
             if (countDown > ticksUntilTheBackup){
                 OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
-                Utilities.createBackup(DIR_PATH, OBConfig.PROPERTIES.worldname);
+                Thread thread = new Thread("WorldBackupThread"){
+                    @Override
+                    public void run() {
+                        Utilities.createBackup(DIR_PATH, OBConfig.PROPERTIES.worldname);
+                    }
+                };
+                thread.run();
                 countDown = 0;
                 OpenBackup.logger.info(OBConfig.TEXT.msgBackupDone);
             }

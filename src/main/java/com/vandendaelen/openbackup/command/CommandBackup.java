@@ -2,7 +2,6 @@ package com.vandendaelen.openbackup.command;
 
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
-import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -13,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
+
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.DIR_PATH;
 
 public class CommandBackup extends CommandBase {
     @Override
@@ -32,7 +33,13 @@ public class CommandBackup extends CommandBase {
 
         if (args[0].equals("backup")){
             OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
-            Utilities.createBackup(OpenBackupServerEventHandler.DIR_PATH,OBConfig.PROPERTIES.worldname);
+            Thread thread = new Thread("WorldBackupThread"){
+                @Override
+                public void run() {
+                    Utilities.createBackup(DIR_PATH, OBConfig.PROPERTIES.worldname);
+                }
+            };
+            thread.run();
             OpenBackup.logger.info(OBConfig.TEXT.msgBackupDone);
         }
         else {
