@@ -1,24 +1,23 @@
 package com.vandendaelen.openbackup;
 
+import com.vandendaelen.openbackup.command.CommandBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
+import com.vandendaelen.openbackup.string.OBStrings;
 import com.vandendaelen.openbackup.utils.Reference;
-import net.minecraft.client.Minecraft;
-import net.minecraft.command.server.CommandSaveOn;
-import net.minecraft.init.Blocks;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.server.permission.DefaultPermissionLevel;
+import net.minecraftforge.server.permission.PermissionAPI;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION.VERSION)
+@Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION.VERSION, acceptableRemoteVersions = "*")
 public class OpenBackup
 {
     public static Logger logger;
@@ -48,7 +47,12 @@ public class OpenBackup
             }
         }
 
+        //Permissions
+        PermissionAPI.registerNode(OBStrings.Permission.permCmdBackup, DefaultPermissionLevel.OP, "Allows /openbackup command");
+    }
 
-
+    @EventHandler
+    public void serverStarting(FMLServerStartingEvent event){
+        event.registerServerCommand(new CommandBackup());
     }
 }
