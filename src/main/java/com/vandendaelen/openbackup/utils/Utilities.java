@@ -60,7 +60,7 @@ public class Utilities {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             Date date = new Date();
 
-            FileOutputStream fos = new FileOutputStream(path+"\\"+dateFormat.format(date)+".zip");
+            FileOutputStream fos = new FileOutputStream(path+File.separatorChar+dateFormat.format(date)+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
             File fileToZip = new File(sourceFile);
 
