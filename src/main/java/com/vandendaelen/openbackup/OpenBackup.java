@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
-@Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION.VERSION, acceptableRemoteVersions = "*")
+@Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION.VERSION, dependencies = Reference.DEP,acceptableRemoteVersions = "*")
 public class OpenBackup
 {
     public static Logger logger;
@@ -37,7 +37,7 @@ public class OpenBackup
 
         //Directory things
         File file = FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
-        OpenBackupServerEventHandler.DIR_PATH = file.getAbsolutePath().concat("openbackups").replace(".","");
+        OpenBackupServerEventHandler.DIR_PATH = new File(file, "openbackups").getAbsolutePath();
         File dirFile = new File(OpenBackupServerEventHandler.DIR_PATH);
         if (!dirFile.exists()) {
             if (dirFile.mkdir()) {
