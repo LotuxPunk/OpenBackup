@@ -28,9 +28,11 @@ public class OBConfig {
         @Config.Comment("World name")
         @Config.LangKey("config.prop.worldname")
         public String worldname = "world";
+
         @Config.LangKey("config.prop.filetokeep")
         @Config.Comment("Number files to keep")
         public int fileToKeep = 30;
+
         @Config.LangKey("config.prop.enable")
         @Config.Comment("Enable auto-backup")
         public boolean enable = true;

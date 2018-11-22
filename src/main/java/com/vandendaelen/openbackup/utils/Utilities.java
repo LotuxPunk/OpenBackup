@@ -55,7 +55,6 @@ public class Utilities {
     }
 
     public static void createBackup(String path, String sourceFile){
-        Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),false);
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             Date date = new Date();
@@ -71,7 +70,6 @@ public class Utilities {
         catch (Exception e){
             OpenBackup.logger.info(e.getMessage());
         }
-        Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
 
         File backupDir = new File(path);
         if (backupDir.list().length > OBConfig.PROPERTIES.fileToKeep){
