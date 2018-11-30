@@ -25,7 +25,11 @@ public class OBConfig {
     }
 
     public static class Properties{
-        @Config.Comment("World name")
+        @Config.Comment("Dynamicaly detect the world name ?")
+        @Config.LangKey("config.prop.worldname.dynamic")
+        public boolean dynamicWorldName = true;
+
+        @Config.Comment("If dynamicWorldName == false, select the world name")
         @Config.LangKey("config.prop.worldname")
         public String worldname = "world";
 

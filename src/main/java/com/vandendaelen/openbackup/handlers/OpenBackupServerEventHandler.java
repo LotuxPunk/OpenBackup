@@ -17,6 +17,7 @@ public class OpenBackupServerEventHandler {
     public static long countDown;
     public static boolean isRunning = false;
     public static String DIR_PATH = "";
+    public static String worldName = "";
 
     @SubscribeEvent
     public static void onServerTickEvent(TickEvent.ServerTickEvent event) {
