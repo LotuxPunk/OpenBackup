@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.server.permission.DefaultPermissionLevel;
 import net.minecraftforge.server.permission.PermissionAPI;
@@ -58,8 +59,18 @@ public class OpenBackup
                 OpenBackup.logger.info("Failed to create directory!");
             }
         }
+    }
 
-        OpenBackupServerEventHandler.worldName = event.getServer().getWorldName();
+
+    @EventHandler
+    public void serverStarted(FMLServerStartedEvent event){
+        //World name
+        if (OBConfig.PROPERTIES.dynamicWorldName){
+            OpenBackupServerEventHandler.worldName = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getWorldInfo().getWorldName();
+        }
+        else{
+            OpenBackupServerEventHandler.worldName = OBConfig.PROPERTIES.worldname;
+        }
         logger.info("World name : "+OpenBackupServerEventHandler.worldName);
     }
 }

@@ -10,7 +10,6 @@ public class OBConfig {
     public static final Text TEXT = new Text();
     public static final Properties PROPERTIES = new Properties();
 
-
     public static class Timer{
         @Config.LangKey("config.timer.backup")
         @Config.Comment("In minute")
@@ -35,11 +34,14 @@ public class OBConfig {
 
         @Config.LangKey("config.prop.filetokeep")
         @Config.Comment("Number files to keep")
-        public int fileToKeep = 30;
+        public int fileToKeep = 15;
 
         @Config.LangKey("config.prop.enable")
         @Config.Comment("Enable auto-backup")
         public boolean enable = true;
 
+        @Config.LangKey("config.prop.sizetokeep")
+        @Config.Comment("Max weight of the openbackup folder in MB")
+        public int maxSizeBackupFolder = 30720;
     }
 }

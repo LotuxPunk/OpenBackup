@@ -27,11 +27,17 @@ public class Utilities {
         }
     }
 
-    public static void deleteOldBackups(Path dirPath){
+    public static void deleteOldBackups(File backupDir){
+        Path dirPath = backupDir.toPath();
         List<Path> files = new ArrayList<>();
+
+        long maxFolderSize = OBConfig.PROPERTIES.maxSizeBackupFolder * 1024 * 1024;
+        double folderSize = 0;
+
         try(DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
             for(Path p : stream) {
                 files.add(p);
+                folderSize += p.toFile().length();
             }
         }
         catch (Exception e){
@@ -47,9 +53,10 @@ public class Utilities {
             return 0;
         });
 
-        while (files.size() > OBConfig.PROPERTIES.fileToKeep) {
+        while (files.size() > OBConfig.PROPERTIES.fileToKeep || folderSize > maxFolderSize) {
             Path path = files.get(0);
             files.remove(path);
+            folderSize -= path.toFile().length();
             path.toFile().delete();
         }
     }
@@ -72,8 +79,6 @@ public class Utilities {
         }
 
         File backupDir = new File(path);
-        if (backupDir.list().length > OBConfig.PROPERTIES.fileToKeep){
-            Utilities.deleteOldBackups(backupDir.toPath());
-        }
+        Utilities.deleteOldBackups(backupDir);
     }
 }
