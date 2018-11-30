@@ -25,6 +25,7 @@ public class OpenBackupServerEventHandler {
             countDown++;
             if (countDown > ticksUntilTheBackup){
                 OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
+                Utilities.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
                 MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                 Utilities.enableWorldsSaving(server,false);
                 startBackupThread();
@@ -43,6 +44,7 @@ public class OpenBackupServerEventHandler {
                     public void run() {
                         Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
                         OpenBackup.logger.info(OBConfig.TEXT.msgBackupDone);
+                        Utilities.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
                         countDown = 0;
                         isRunning = false;
                     }
