@@ -37,7 +37,7 @@ public class OpenBackupServerEventHandler {
         Thread thread = new Thread("WorldBackupThread"){
             @Override
             public void run() {
-                Utilities.createBackup(DIR_PATH, OBConfig.PROPERTIES.worldname);
+                Utilities.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
                     @Override
                     public void run() {
