@@ -3,6 +3,7 @@ package com.vandendaelen.openbackup.command;
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
+import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -33,7 +34,7 @@ public class CommandBackup extends CommandBase {
         if (args[0].equals("backup")){
             if (!OpenBackupServerEventHandler.isRunning){
                 OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
-                Utilities.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
+                PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
                 OpenBackupServerEventHandler.startBackupThread();
             }
         }

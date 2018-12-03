@@ -2,6 +2,8 @@ package com.vandendaelen.openbackup.handlers;
 
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
+import com.vandendaelen.openbackup.helpers.BackupHelper;
+import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.utils.Reference;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.server.MinecraftServer;
@@ -25,7 +27,7 @@ public class OpenBackupServerEventHandler {
             countDown++;
             if (countDown > ticksUntilTheBackup){
                 OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
-                Utilities.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
+                PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
                 MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
                 Utilities.enableWorldsSaving(server,false);
                 startBackupThread();
@@ -38,13 +40,13 @@ public class OpenBackupServerEventHandler {
         Thread thread = new Thread("WorldBackupThread"){
             @Override
             public void run() {
-                Utilities.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
+                BackupHelper.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
                     @Override
                     public void run() {
                         Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
                         OpenBackup.logger.info(OBConfig.TEXT.msgBackupDone);
-                        Utilities.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
+                        PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
                         countDown = 0;
                         isRunning = false;
                     }
