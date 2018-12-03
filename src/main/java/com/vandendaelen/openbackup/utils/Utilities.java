@@ -2,9 +2,13 @@ package com.vandendaelen.openbackup.utils;
 
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
+import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import javax.swing.text.html.parser.Entity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +35,7 @@ public class Utilities {
         Path dirPath = backupDir.toPath();
         List<Path> files = new ArrayList<>();
 
-        long maxFolderSize = OBConfig.PROPERTIES.maxSizeBackupFolder * 1024 * 1024;
+        long maxFolderSize = (long)OBConfig.PROPERTIES.maxSizeBackupFolder * 1024 * 1024;
         double folderSize = 0;
 
         try(DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
@@ -66,7 +70,7 @@ public class Utilities {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             Date date = new Date();
 
-            FileOutputStream fos = new FileOutputStream(path+File.separatorChar+dateFormat.format(date)+".zip");
+            FileOutputStream fos = new FileOutputStream(path+File.separatorChar+ OpenBackupServerEventHandler.worldName +"-"+dateFormat.format(date)+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
             File fileToZip = new File(sourceFile);
 
@@ -80,5 +84,12 @@ public class Utilities {
 
         File backupDir = new File(path);
         Utilities.deleteOldBackups(backupDir);
+    }
+
+    public static void sendMessageToEveryone(String message){
+        List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+        for (EntityPlayerMP player:players) {
+            player.sendMessage(new TextComponentString(message));
+        }
     }
 }
