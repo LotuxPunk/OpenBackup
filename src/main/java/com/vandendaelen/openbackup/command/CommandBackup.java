@@ -3,13 +3,16 @@ package com.vandendaelen.openbackup.command;
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
+import com.vandendaelen.openbackup.helpers.FileHelper;
 import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -23,7 +26,7 @@ public class CommandBackup extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/openbackup [backup]";
+        return "/openbackup [backup/restore]";
     }
 
     @Override
@@ -38,15 +41,31 @@ public class CommandBackup extends CommandBase {
                 OpenBackupServerEventHandler.startBackupThread();
             }
         }
-        else {
-            throw new CommandException("Error : " + getUsage(sender));
+        else{
+            if (args[0].equals("restore")){
+                if (!args[1].isEmpty()){
+                    Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),false);
+                    OpenBackupServerEventHandler.restoreBackup(args[1]);
+                    Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
+                }
+                else{
+                    throw new CommandException("Error : you must specify a filename");
+                }
+            }
+            else {
+                throw new CommandException("Error : " + getUsage(sender));
+            }
         }
     }
 
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if(args.length < 2 ) {
-            return getListOfStringsMatchingLastWord(args, "backup");
+            return getListOfStringsMatchingLastWord(args, "backup", "restore");
+        }
+
+        if (args[0].equals("restore")){
+            return getListOfStringsMatchingLastWord(args, FileHelper.getFilesBackupDir());
         }
 
         return Collections.emptyList();

@@ -60,10 +60,28 @@ public class OpenBackupServerEventHandler {
         thread.start();
     }
 
-    public static void startLoadBackupThread(String fileName){
+    public static void restoreBackup(String fileName){
         PlayerHelper.kickEveryone(OBConfig.TEXT.msgReloadKick);
         Utilities.unloadWorlds();
-        FileHelper.deleteWorldForlder(new File(worldName));
-        ZipUtils.unzip(DIR_PATH+File.separatorChar+fileName, worldName);
+        Thread thread = new Thread("WorldBackupThread"){
+            @Override
+            public void run() {
+                FileHelper.deleteWorldForlder(new File(worldName));
+                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
+                        Thread thread1 = new Thread("WorldRestoreThread"){
+                            @Override
+                            public void run() {
+                                ZipUtils.unzip(DIR_PATH+File.separatorChar+fileName, worldName);
+                            }
+                        };
+                        thread1.start();
+                    }
+                });
+            }
+        };
+        thread.start();
     }
 }
