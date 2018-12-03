@@ -15,5 +15,10 @@ public class PlayerHelper {
         }
     }
 
-    //TODO : Add method to kick everyone with a beautiful message
+    public static void kickEveryone(String reason){
+        List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
+        for (EntityPlayerMP player : players) {
+            player.connection.disconnect(new TextComponentString(reason));
+        }
+    }
 }

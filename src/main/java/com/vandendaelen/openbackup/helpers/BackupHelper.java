@@ -75,4 +75,8 @@ public class BackupHelper {
         File backupDir = new File(path);
         deleteOldBackups(backupDir);
     }
+
+    public static void loadBackup(File backupFile){
+
+    }
 }

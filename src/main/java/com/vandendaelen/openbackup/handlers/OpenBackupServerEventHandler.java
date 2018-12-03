@@ -3,14 +3,18 @@ package com.vandendaelen.openbackup.handlers;
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
+import com.vandendaelen.openbackup.helpers.FileHelper;
 import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.utils.Reference;
 import com.vandendaelen.openbackup.utils.Utilities;
+import com.vandendaelen.openbackup.utils.ZipUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
+import java.io.File;
 
 @Mod.EventBusSubscriber(modid = Reference.MODID)
 public class OpenBackupServerEventHandler {
@@ -54,5 +58,12 @@ public class OpenBackupServerEventHandler {
             }
         };
         thread.start();
+    }
+
+    public static void startLoadBackupThread(String fileName){
+        PlayerHelper.kickEveryone(OBConfig.TEXT.msgReloadKick);
+        Utilities.unloadWorlds();
+        FileHelper.deleteWorldForlder(new File(worldName));
+        ZipUtils.unzip(DIR_PATH+File.separatorChar+fileName, worldName);
     }
 }

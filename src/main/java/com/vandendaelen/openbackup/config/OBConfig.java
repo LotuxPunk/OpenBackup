@@ -21,6 +21,8 @@ public class OBConfig {
         public String msgBackupStarted = "Server backup - Started";
         @Config.LangKey("config.msg.done")
         public String msgBackupDone = "Server backup - Done";
+        @Config.LangKey("config.msg.kick")
+        public String msgReloadKick = "The world is being restored";
     }
 
     public static class Properties{
