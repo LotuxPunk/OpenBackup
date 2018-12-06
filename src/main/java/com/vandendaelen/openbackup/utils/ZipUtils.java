@@ -40,39 +40,59 @@ public class ZipUtils {
         fis.close();
     }
 
-    public static void unzip(String zipFilePath, String destDir) {
-        File dir = new File(destDir);
-        // create output directory if it doesn't exist
-        if(!dir.exists()) dir.mkdirs();
-        FileInputStream fis;
-        //buffer for read and write data to file
-        byte[] buffer = new byte[1024];
+    public static void unzip(String zipFile, String destinationFolder) {
+        File directory = new File(destinationFolder);
+
+        // if the output directory doesn't exist, create it
+        if(!directory.exists())
+            directory.mkdirs();
+
+        // buffer for read and write data to file
+        byte[] buffer = new byte[2048];
+
         try {
-            fis = new FileInputStream(zipFilePath);
-            ZipInputStream zis = new ZipInputStream(fis);
-            ZipEntry ze = zis.getNextEntry();
-            while(ze != null){
-                String fileName = ze.getName();
-                File newFile = new File(destDir + File.separator + fileName);
-                OpenBackup.logger.info("Unzipping to "+newFile.getAbsolutePath());
-                //create directories for sub directories in zip
-                new File(newFile.getParent()).mkdirs();
-                FileOutputStream fos = new FileOutputStream(newFile);
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
+            FileInputStream fInput = new FileInputStream(zipFile);
+            ZipInputStream zipInput = new ZipInputStream(fInput);
+
+            ZipEntry entry = zipInput.getNextEntry();
+
+            while(entry != null){
+                String entryName = entry.getName();
+                File file = new File(destinationFolder + File.separator + entryName);
+
+                OpenBackup.logger.info("Unzip file " + entryName + " to " + file.getAbsolutePath());
+
+                // create the directories of the zip directory
+                if(entry.isDirectory()) {
+                    File newDir = new File(file.getAbsolutePath());
+                    if(!newDir.exists()) {
+                        boolean success = newDir.mkdirs();
+                        if(success == false) {
+                            OpenBackup.logger.info("Problem creating Folder");
+                        }
+                    }
                 }
-                fos.close();
-                //close this ZipEntry
-                zis.closeEntry();
-                ze = zis.getNextEntry();
+                else {
+                    FileOutputStream fOutput = new FileOutputStream(file);
+                    int count = 0;
+                    while ((count = zipInput.read(buffer)) > 0) {
+                        // write 'count' bytes to the file output stream
+                        fOutput.write(buffer, 0, count);
+                    }
+                    fOutput.close();
+                }
+                // close ZipEntry and take the next one
+                zipInput.closeEntry();
+                entry = zipInput.getNextEntry();
             }
-            //close last ZipEntry
-            zis.closeEntry();
-            zis.close();
-            fis.close();
+
+            // close the last ZipEntry
+            zipInput.closeEntry();
+
+            zipInput.close();
+            fInput.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            OpenBackup.logger.info(e.getMessage());
         }
     }
 }
