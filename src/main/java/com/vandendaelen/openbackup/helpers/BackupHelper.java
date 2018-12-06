@@ -30,8 +30,11 @@ public class BackupHelper {
 
         try(DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
             for(Path p : stream) {
-                files.add(p);
-                folderSize += p.toFile().length();
+                if(!p.getFileName().toString().equals("restore")) {
+                    files.add(p);
+                    folderSize += p.toFile().length();
+                }
+
             }
         }
         catch (Exception e){
@@ -74,9 +77,5 @@ public class BackupHelper {
 
         File backupDir = new File(path);
         deleteOldBackups(backupDir);
-    }
-
-    public static void loadBackup(File backupFile){
-
     }
 }
