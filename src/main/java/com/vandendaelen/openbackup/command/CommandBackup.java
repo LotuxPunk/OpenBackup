@@ -5,14 +5,11 @@ import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.FileHelper;
 import com.vandendaelen.openbackup.helpers.PlayerHelper;
-import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -44,9 +41,7 @@ public class CommandBackup extends CommandBase {
         else{
             if (args[0].equals("restore")){
                 if (!args[1].isEmpty()){
-                    Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),false);
-                    OpenBackupServerEventHandler.restoreBackup(args[1]);
-                    Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
+                    OpenBackupServerEventHandler.restoreBackup(args[1], sender.getCommandSenderEntity());
                 }
                 else{
                     throw new CommandException("Error : you must specify a filename");

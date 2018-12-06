@@ -3,12 +3,14 @@ package com.vandendaelen.openbackup.handlers;
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
-import com.vandendaelen.openbackup.helpers.FileHelper;
 import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.utils.Reference;
 import com.vandendaelen.openbackup.utils.Utilities;
 import com.vandendaelen.openbackup.utils.ZipUtils;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -60,28 +62,21 @@ public class OpenBackupServerEventHandler {
         thread.start();
     }
 
-    public static void restoreBackup(String fileName){
-        PlayerHelper.kickEveryone(OBConfig.TEXT.msgReloadKick);
-        Utilities.unloadWorlds();
-        Thread thread = new Thread("WorldBackupThread"){
+    public static void restoreBackup(String fileName, Entity sender){
+        Thread thread1 = new Thread("WorldRestoreThread"){
             @Override
             public void run() {
-                FileHelper.deleteWorldForlder(new File(worldName));
+                ZipUtils.unzip(DIR_PATH+File.separatorChar+fileName, DIR_PATH+File.separatorChar+"restore");
                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
                     @Override
                     public void run() {
-                        Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
-                        Thread thread1 = new Thread("WorldRestoreThread"){
-                            @Override
-                            public void run() {
-                                ZipUtils.unzip(DIR_PATH+File.separatorChar+fileName, worldName);
-                            }
-                        };
-                        thread1.start();
+                        if (sender instanceof EntityPlayerMP)
+                            sender.sendMessage(new TextComponentString(OBConfig.TEXT.msgUnzip));
+                        OpenBackup.logger.info(OBConfig.TEXT.msgUnzip);
                     }
                 });
             }
         };
-        thread.start();
+        thread1.start();
     }
 }

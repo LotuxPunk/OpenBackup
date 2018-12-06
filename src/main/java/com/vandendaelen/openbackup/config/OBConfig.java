@@ -23,6 +23,8 @@ public class OBConfig {
         public String msgBackupDone = "Server backup - Done";
         @Config.LangKey("config.msg.kick")
         public String msgReloadKick = "The world is being restored";
+        @Config.LangKey("config.msg.unzip")
+        public String msgUnzip = "The backup is unziped in openbackup/restore";
     }
 
     public static class Properties{
