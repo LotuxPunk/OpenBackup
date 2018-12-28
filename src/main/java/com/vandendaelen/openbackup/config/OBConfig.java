@@ -18,13 +18,11 @@ public class OBConfig {
 
     public static class Text{
         @Config.LangKey("config.msg.started")
-        public String msgBackupStarted = "Server backup - Started";
+        public String msgBackupStarted = "[OpenBackup] Server backup - Started";
         @Config.LangKey("config.msg.done")
-        public String msgBackupDone = "Server backup - Done";
-        @Config.LangKey("config.msg.kick")
-        public String msgReloadKick = "The world is being restored";
+        public String msgBackupDone = "[OpenBackup] Server backup - Done";
         @Config.LangKey("config.msg.unzip")
-        public String msgUnzip = "The backup is unziped in openbackup/restore";
+        public String msgUnzip = "[OpenBackup] The backup is unziped in openbackup/restore";
     }
 
     public static class Properties{
@@ -43,6 +41,10 @@ public class OBConfig {
         @Config.LangKey("config.prop.enable")
         @Config.Comment("Enable auto-backup")
         public boolean enable = true;
+
+        @Config.LangKey("config.prop.backup_start")
+        @Config.Comment("Enable backup at the server start")
+        public boolean backupOnStart = true;
 
         @Config.LangKey("config.prop.sizetokeep")
         @Config.Comment("Max weight of the openbackup folder in MB")

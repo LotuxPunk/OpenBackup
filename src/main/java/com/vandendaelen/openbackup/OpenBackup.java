@@ -19,6 +19,7 @@ import net.minecraftforge.server.permission.PermissionAPI;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION.VERSION, dependencies = Reference.DEP,acceptableRemoteVersions = "*")
 public class OpenBackup
@@ -37,9 +38,6 @@ public class OpenBackup
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        //Timer
-        OpenBackupServerEventHandler.ticksUntilTheBackup = OBConfig.TIMER.timer*60*20;
-
         //Permissions
         PermissionAPI.registerNode(OBStrings.Permission.permCmdBackup, DefaultPermissionLevel.OP, "Allows /openbackup command");
     }
@@ -72,5 +70,9 @@ public class OpenBackup
             OpenBackupServerEventHandler.worldName = OBConfig.PROPERTIES.worldname;
         }
         logger.info("World name : "+OpenBackupServerEventHandler.worldName);
+
+        //Backup loop
+        if (OBConfig.PROPERTIES.enable)
+            OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackupThread,OBConfig.PROPERTIES.backupOnStart ? 1 : OBConfig.TIMER.timer,OBConfig.TIMER.timer, TimeUnit.MINUTES);
     }
 }

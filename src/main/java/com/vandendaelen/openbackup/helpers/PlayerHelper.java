@@ -14,11 +14,4 @@ public class PlayerHelper {
             player.sendMessage(new TextComponentString(message));
         }
     }
-
-    public static void kickEveryone(String reason){
-        List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
-        for (EntityPlayerMP player : players) {
-            player.connection.disconnect(new TextComponentString(reason));
-        }
-    }
 }

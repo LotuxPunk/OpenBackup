@@ -1,15 +1,13 @@
 package com.vandendaelen.openbackup.command;
 
-import com.vandendaelen.openbackup.OpenBackup;
-import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.FileHelper;
-import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -23,7 +21,7 @@ public class CommandBackup extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/openbackup [backup/restore]";
+        return "/openbackup [backup, restore]";
     }
 
     @Override
@@ -32,13 +30,12 @@ public class CommandBackup extends CommandBase {
             throw new CommandException("Error : " + getUsage(sender));
 
         if (args[0].equals("backup")){
-            if (!OpenBackupServerEventHandler.isRunning){
-                OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
-                PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
+            if (!OpenBackupServerEventHandler.isRunning)
                 OpenBackupServerEventHandler.startBackupThread();
-            }
+            else
+                sender.sendMessage(new TextComponentString("Backup already running"));
         }
-        else{
+        else {
             if (args[0].equals("restore")){
                 if (!args[1].isEmpty()){
                     OpenBackupServerEventHandler.restoreBackup(args[1], sender.getCommandSenderEntity());

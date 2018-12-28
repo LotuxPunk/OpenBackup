@@ -13,48 +13,38 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 @Mod.EventBusSubscriber(modid = Reference.MODID)
 public class OpenBackupServerEventHandler {
 
-    public static long ticksUntilTheBackup = 0;
-    public static long countDown;
     public static boolean isRunning = false;
     public static String DIR_PATH = "";
     public static String worldName = "";
-
-    @SubscribeEvent
-    public static void onServerTickEvent(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && OBConfig.PROPERTIES.enable && !isRunning){
-            countDown++;
-            if (countDown > ticksUntilTheBackup){
-                OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
-                PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
-                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-                Utilities.enableWorldsSaving(server,false);
-                startBackupThread();
-            }
-        }
-    }
+    public static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public static void startBackupThread(){
         isRunning = true;
+        OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
+        PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
+
+        MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+        Utilities.enableWorldsSaving(server,false);
+
         Thread thread = new Thread("WorldBackupThread"){
             @Override
             public void run() {
                 BackupHelper.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
-                FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
+                server.addScheduledTask(new Runnable() {
                     @Override
                     public void run() {
-                        Utilities.enableWorldsSaving(FMLCommonHandler.instance().getMinecraftServerInstance(),true);
+                        Utilities.enableWorldsSaving(server ,true);
+                        isRunning = false;
                         OpenBackup.logger.info(OBConfig.TEXT.msgBackupDone);
                         PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
-                        countDown = 0;
-                        isRunning = false;
                     }
                 });
             }
@@ -66,7 +56,7 @@ public class OpenBackupServerEventHandler {
         Thread thread1 = new Thread("WorldRestoreThread"){
             @Override
             public void run() {
-                ZipUtils.unzip(DIR_PATH+File.separatorChar+fileName, DIR_PATH+File.separatorChar+"restore");
+                ZipUtils.unzip(DIR_PATH+ File.separatorChar+fileName, DIR_PATH+File.separatorChar+"restore");
                 FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(new Runnable() {
                     @Override
                     public void run() {
@@ -79,4 +69,6 @@ public class OpenBackupServerEventHandler {
         };
         thread1.start();
     }
+
+
 }
