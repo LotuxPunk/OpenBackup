@@ -4,6 +4,8 @@ import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.ZipUtils;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -21,25 +23,12 @@ import java.util.zip.ZipOutputStream;
 
 public class BackupHelper {
 
-    public static void deleteOldBackups(File backupDir){
+    private static void deleteOldBackups(File backupDir){
         Path dirPath = backupDir.toPath();
-        List<Path> files = new ArrayList<>();
-
         long maxFolderSize = (long) OBConfig.PROPERTIES.maxSizeBackupFolder * 1024 * 1024;
-        double folderSize = 0;
 
-        try(DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
-            for(Path p : stream) {
-                if(!p.getFileName().toString().equals("restore")) {
-                    files.add(p);
-                    folderSize += p.toFile().length();
-                }
-
-            }
-        }
-        catch (Exception e){
-            OpenBackup.logger.info(e.getMessage());
-        }
+        List<Path> files = getFileList(dirPath);
+        long folderSize = getSizeOfFileList(files);
 
         Collections.sort(files, (o1, o2) -> {
             try {
@@ -65,7 +54,8 @@ public class BackupHelper {
 
             FileOutputStream fos = new FileOutputStream(path+File.separatorChar+ OpenBackupServerEventHandler.worldName +"-"+dateFormat.format(date)+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
-            File fileToZip = new File(sourceFile);
+
+            File fileToZip = new File(FMLCommonHandler.instance().getSide() == Side.CLIENT ? "saves" + File.separatorChar + sourceFile : sourceFile);
 
             ZipUtils.zipFile(fileToZip, fileToZip.getName(), zipOut);
             zipOut.close();
@@ -77,5 +67,32 @@ public class BackupHelper {
 
         File backupDir = new File(path);
         deleteOldBackups(backupDir);
+    }
+
+    public static List<Path> getFileList(Path dirPath){
+        List<Path> files = new ArrayList<>();
+
+        try(DirectoryStream<Path> stream = Files.newDirectoryStream(dirPath)) {
+            for(Path p : stream) {
+                if(!p.getFileName().toString().equals("restore")) {
+                    files.add(p);
+                }
+            }
+        }
+        catch (Exception e){
+            OpenBackup.logger.info(e.getMessage());
+        }
+
+        return files;
+    }
+
+    public static long getSizeOfFileList(List<Path> files){
+        long folderSize = 0;
+        for (Path p : files) {
+            if(!p.getFileName().toString().equals("restore")) {
+                folderSize += p.toFile().length();
+            }
+        }
+        return folderSize;
     }
 }

@@ -14,8 +14,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.server.permission.DefaultPermissionLevel;
 import net.minecraftforge.server.permission.PermissionAPI;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
@@ -39,7 +41,7 @@ public class OpenBackup
     public void init(FMLInitializationEvent event)
     {
         //Permissions
-        PermissionAPI.registerNode(OBStrings.Permission.permCmdBackup, DefaultPermissionLevel.OP, "Allows /openbackup command");
+        PermissionAPI.registerNode(OBStrings.Permission.permCmdBackup, DefaultPermissionLevel.OP, "Allows /openbackup commands");
     }
 
     @EventHandler
@@ -64,10 +66,10 @@ public class OpenBackup
     public void serverStarted(FMLServerStartedEvent event){
         //World name
         if (OBConfig.PROPERTIES.dynamicWorldName){
-            OpenBackupServerEventHandler.worldName = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getWorldInfo().getWorldName();
+            OpenBackupServerEventHandler.worldName += FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getWorldInfo().getWorldName();
         }
         else{
-            OpenBackupServerEventHandler.worldName = OBConfig.PROPERTIES.worldname;
+            OpenBackupServerEventHandler.worldName += OBConfig.PROPERTIES.worldname;
         }
         logger.info("World name : "+OpenBackupServerEventHandler.worldName);
 
