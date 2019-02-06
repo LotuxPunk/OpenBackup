@@ -12,7 +12,7 @@ public class Reference {
         public static final String MCVERSION = "1.12.2";
         public static final String MAJORMOD = "0";
         public static final String MAJORAPI = "0";
-        public static final String MINOR = "4";
+        public static final String MINOR = "5";
         public static final String PATCH = "8";
         public static final String VERSION = MCVERSION+"-"+MAJORMOD+"."+MAJORAPI+"."+MINOR+"."+PATCH;
     }
