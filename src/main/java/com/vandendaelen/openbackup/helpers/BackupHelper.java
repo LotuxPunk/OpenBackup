@@ -52,7 +52,7 @@ public class BackupHelper {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             Date date = new Date();
 
-            FileOutputStream fos = new FileOutputStream(path+File.separatorChar+ OpenBackupServerEventHandler.worldName +"-"+dateFormat.format(date)+".zip");
+            FileOutputStream fos = new FileOutputStream(path+File.separatorChar+ OpenBackupServerEventHandler.worldName.replace(" ", "") +"-"+dateFormat.format(date)+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
 
             File fileToZip = new File(FMLCommonHandler.instance().getSide() == Side.CLIENT ? "saves" + File.separatorChar + sourceFile : sourceFile);

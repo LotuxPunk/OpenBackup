@@ -1,5 +1,6 @@
 package com.vandendaelen.openbackup.command;
 
+import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
 import com.vandendaelen.openbackup.helpers.FileHelper;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class CommandBackup extends CommandBase {
 
-    List<String> subcommands = Arrays.asList("backup","restore","status");
+    List<String> subcommands = Arrays.asList("backup","restore","status", "delete");
 
     @Override
     public String getName() {
@@ -69,6 +70,21 @@ public class CommandBackup extends CommandBase {
                 sender.sendMessage(new TextComponentString(MessageFormat.format("{0} file(s), {1}MB -> ~{2}GB",nbFiles,folderSize/1024/1024,folderSize/1024/1024/1024)));
                 break;
             }
+            case 3 : { //delete
+                if (args.length > 1) {
+                    try {
+                        File fileToDelete = new File(OpenBackupServerEventHandler.DIR_PATH + File.separatorChar + args[1]);
+                        OpenBackup.logger.info(fileToDelete.getAbsolutePath());
+                        if (FileHelper.deleteFile(fileToDelete))
+                            sender.sendMessage(new TextComponentString("Backup deleted"));
+                        else
+                            sender.sendMessage(new TextComponentString("Error on deleting the backup"));
+                    } catch (Exception e) {
+                        sender.sendMessage(new TextComponentString(e.getMessage()));
+                    }
+                }
+                break;
+            }
             default:
                 throw new CommandException("Error : " + getUsage(sender));
         }
@@ -80,7 +96,7 @@ public class CommandBackup extends CommandBase {
             return getListOfStringsMatchingLastWord(args, subcommands);
         }
 
-        if (args[0].equals("restore")){
+        if (args[0].equals("restore") || args[0].equals("delete")){
             return getListOfStringsMatchingLastWord(args, FileHelper.getFilesBackupDir());
         }
 

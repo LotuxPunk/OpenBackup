@@ -17,6 +17,10 @@ public class FileHelper {
         }
     }
 
+    public static boolean deleteFile(File fileTodelete){
+        return FileUtils.deleteQuietly(fileTodelete);
+    }
+
     public static String[] getFilesBackupDir(){
         return new File(OpenBackupServerEventHandler.DIR_PATH).list();
     }
