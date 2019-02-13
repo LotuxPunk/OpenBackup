@@ -20,13 +20,15 @@ public class ThreadBackup extends Thread {
     @Override
     public void run() {
         BackupHelper.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
-        server.addScheduledTask(new Runnable() {
-            @Override
-            public void run() {
-                Utilities.enableWorldsSaving(server ,true);
-                OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupDone);
-                PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
-            }
-        });
+        server.addScheduledTask(new PostBackupAction());
+    }
+
+    private class PostBackupAction implements Runnable{
+        @Override
+        public void run() {
+            Utilities.enableWorldsSaving(server ,true);
+            OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupDone);
+            PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
+        }
     }
 }

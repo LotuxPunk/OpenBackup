@@ -25,20 +25,18 @@ public class OpenBackup
     public static Logger LOGGER;
 
     @EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
+    public void preInit(FMLPreInitializationEvent event) {
         LOGGER = event.getModLog();
     }
 
     @EventHandler
-    public void init(FMLInitializationEvent event)
-    {
+    public void init(FMLInitializationEvent event) {
         //Permissions
         PermissionAPI.registerNode(OBStrings.Permission.permCmdBackup, DefaultPermissionLevel.OP, "Allows /openbackup commands");
     }
 
     @EventHandler
-    public void serverStarting(FMLServerStartingEvent event){
+    public void serverStarting(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandBackup());
 
         //Directory things
@@ -54,9 +52,8 @@ public class OpenBackup
         }
     }
 
-
     @EventHandler
-    public void serverStarted(FMLServerStartedEvent event){
+    public void serverStarted(FMLServerStartedEvent event) {
         //World name
         if (OBConfig.PROPERTIES.dynamicWorldName){
             OpenBackupServerEventHandler.worldName += FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getWorldInfo().getWorldName();
@@ -68,6 +65,6 @@ public class OpenBackup
 
         //Backup loop
         if (OBConfig.PROPERTIES.enable)
-            OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackupThread,OBConfig.PROPERTIES.backupOnStart ? 1 : OBConfig.TIMER.timer,OBConfig.TIMER.timer, TimeUnit.MINUTES);
+            OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackup,OBConfig.PROPERTIES.backupOnStart ? 1 : OBConfig.TIMER.timer,OBConfig.TIMER.timer, TimeUnit.MINUTES);
     }
 }
