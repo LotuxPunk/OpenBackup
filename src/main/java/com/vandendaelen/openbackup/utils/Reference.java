@@ -4,8 +4,6 @@ public class Reference {
     public static final String MODID = "openbackup";
     public static final String MOD_NAME = "OpenBackup";
     public static final String DEP = "required-after:forge@[14.23.4.2768,)";
-    public static final String SERVER_PROXY_CLASS = "com.vandendaelen.openbackup.proxy.ServerProxy";
-    public static final String CLIENT_PROXY_CLASS = "com.vandendaelen.openbackup.proxy.ClientProxy";
     public static final String UPDATE_JSON = "https://raw.githubusercontent.com/LotuxPunk/OpenBackup/master/update.json";
 
     public static class VERSION{
