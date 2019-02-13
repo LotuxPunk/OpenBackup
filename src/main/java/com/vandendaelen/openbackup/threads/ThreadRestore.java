@@ -2,6 +2,7 @@ package com.vandendaelen.openbackup.threads;
 
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.config.OBConfig;
+import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.ZipUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,6 +37,7 @@ public class ThreadRestore extends Thread {
             if (sender instanceof EntityPlayerMP)
                 sender.sendMessage(new TextComponentString(OBConfig.TEXT.msgUnzip));
             OpenBackup.LOGGER.info(OBConfig.TEXT.msgUnzip);
+            OpenBackupServerEventHandler.isRunning = false;
         }
     }
 }
