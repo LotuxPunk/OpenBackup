@@ -4,6 +4,7 @@ import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
 import com.vandendaelen.openbackup.helpers.FileHelper;
+import com.vandendaelen.openbackup.threads.ThreadDelete;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -73,16 +74,8 @@ public class CommandBackup extends CommandBase {
             case 3 : { //delete
                 if (args.length > 1) {
                     File fileToDelete = new File(OpenBackupServerEventHandler.DIR_PATH + File.separatorChar + args[1]);
-                    try {
-
-                        OpenBackup.LOGGER.info(fileToDelete.getAbsolutePath());
-                        if (FileHelper.deleteFile(fileToDelete))
-                            sender.sendMessage(new TextComponentString("Backup deleted"));
-                        else
-                            sender.sendMessage(new TextComponentString("Error on deleting the backup"));
-                    } catch (Exception e) {
-                        sender.sendMessage(new TextComponentString(e.getMessage()));
-                    }
+                    ThreadDelete threadDelete = new ThreadDelete(fileToDelete, sender, server);
+                    threadDelete.start();
                 }
                 break;
             }
