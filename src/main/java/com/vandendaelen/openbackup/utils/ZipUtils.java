@@ -60,7 +60,7 @@ public class ZipUtils {
                 String entryName = entry.getName();
                 File file = new File(destinationFolder + File.separator + entryName);
 
-                OpenBackup.logger.info("Unzip file " + entryName + " to " + file.getAbsolutePath());
+                OpenBackup.LOGGER.info("Unzip file " + entryName + " to " + file.getAbsolutePath());
 
                 // create the directories of the zip directory
                 if(entry.isDirectory()) {
@@ -68,7 +68,7 @@ public class ZipUtils {
                     if(!newDir.exists()) {
                         boolean success = newDir.mkdirs();
                         if(success == false) {
-                            OpenBackup.logger.info("Problem creating Folder");
+                            OpenBackup.LOGGER.info("Problem creating Folder");
                         }
                     }
                 }
@@ -92,7 +92,7 @@ public class ZipUtils {
             zipInput.close();
             fInput.close();
         } catch (IOException e) {
-            OpenBackup.logger.info(e.getMessage());
+            OpenBackup.LOGGER.info(e.getMessage());
         }
     }
 }

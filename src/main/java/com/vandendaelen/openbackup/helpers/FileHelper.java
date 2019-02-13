@@ -13,7 +13,7 @@ public class FileHelper {
             FileUtils.deleteDirectory(worldFolder);
         }
         catch (Exception e) {
-            OpenBackup.logger.info(e.getMessage());
+            OpenBackup.LOGGER.info(e.getMessage());
         }
     }
 

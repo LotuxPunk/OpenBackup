@@ -28,7 +28,7 @@ public class OpenBackupServerEventHandler {
 
     public static void startBackupThread(){
         isRunning = true;
-        OpenBackup.logger.info(OBConfig.TEXT.msgBackupStarted);
+        OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupStarted);
         PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
 
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
@@ -43,7 +43,7 @@ public class OpenBackupServerEventHandler {
                     public void run() {
                         Utilities.enableWorldsSaving(server ,true);
                         isRunning = false;
-                        OpenBackup.logger.info(OBConfig.TEXT.msgBackupDone);
+                        OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupDone);
                         PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
                     }
                 });
@@ -62,7 +62,7 @@ public class OpenBackupServerEventHandler {
                     public void run() {
                         if (sender instanceof EntityPlayerMP)
                             sender.sendMessage(new TextComponentString(OBConfig.TEXT.msgUnzip));
-                        OpenBackup.logger.info(OBConfig.TEXT.msgUnzip);
+                        OpenBackup.LOGGER.info(OBConfig.TEXT.msgUnzip);
                     }
                 });
             }

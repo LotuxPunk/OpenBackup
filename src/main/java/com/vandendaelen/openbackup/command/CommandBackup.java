@@ -74,7 +74,7 @@ public class CommandBackup extends CommandBase {
                 if (args.length > 1) {
                     try {
                         File fileToDelete = new File(OpenBackupServerEventHandler.DIR_PATH + File.separatorChar + args[1]);
-                        OpenBackup.logger.info(fileToDelete.getAbsolutePath());
+                        OpenBackup.LOGGER.info(fileToDelete.getAbsolutePath());
                         if (FileHelper.deleteFile(fileToDelete))
                             sender.sendMessage(new TextComponentString("Backup deleted"));
                         else

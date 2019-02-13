@@ -34,7 +34,7 @@ public class BackupHelper {
             try {
                 return Files.getLastModifiedTime(o1).compareTo(Files.getLastModifiedTime(o2));
             } catch (IOException e) {
-                OpenBackup.logger.info(e.getMessage());
+                OpenBackup.LOGGER.info(e.getMessage());
             }
             return 0;
         });
@@ -62,7 +62,7 @@ public class BackupHelper {
             fos.close();
         }
         catch (Exception e){
-            OpenBackup.logger.info(e.getMessage());
+            OpenBackup.LOGGER.info(e.getMessage());
         }
 
         File backupDir = new File(path);
@@ -80,7 +80,7 @@ public class BackupHelper {
             }
         }
         catch (Exception e){
-            OpenBackup.logger.info(e.getMessage());
+            OpenBackup.LOGGER.info(e.getMessage());
         }
 
         return files;
