@@ -4,6 +4,7 @@ import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
 import com.vandendaelen.openbackup.helpers.FileHelper;
+import com.vandendaelen.openbackup.threads.ThreadDelete;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -50,7 +51,7 @@ public class CommandBackup extends CommandBase {
         switch (subcommands.indexOf(args[0])){
             case 0:{ //backup
                 if (!OpenBackupServerEventHandler.isRunning)
-                    OpenBackupServerEventHandler.startBackupThread();
+                    OpenBackupServerEventHandler.startBackup();
                 else
                     sender.sendMessage(new TextComponentString("Backup already running"));
                 break;
@@ -72,16 +73,9 @@ public class CommandBackup extends CommandBase {
             }
             case 3 : { //delete
                 if (args.length > 1) {
-                    try {
-                        File fileToDelete = new File(OpenBackupServerEventHandler.DIR_PATH + File.separatorChar + args[1]);
-                        OpenBackup.LOGGER.info(fileToDelete.getAbsolutePath());
-                        if (FileHelper.deleteFile(fileToDelete))
-                            sender.sendMessage(new TextComponentString("Backup deleted"));
-                        else
-                            sender.sendMessage(new TextComponentString("Error on deleting the backup"));
-                    } catch (Exception e) {
-                        sender.sendMessage(new TextComponentString(e.getMessage()));
-                    }
+                    File fileToDelete = new File(OpenBackupServerEventHandler.DIR_PATH + File.separatorChar + args[1]);
+                    ThreadDelete threadDelete = new ThreadDelete(fileToDelete, sender, server);
+                    threadDelete.start();
                 }
                 break;
             }
