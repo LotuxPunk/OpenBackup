@@ -5,6 +5,7 @@ import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
 import com.vandendaelen.openbackup.helpers.PlayerHelper;
+import com.vandendaelen.openbackup.utils.EnumBroadcast;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.server.MinecraftServer;
 
@@ -28,7 +29,10 @@ public class ThreadBackup extends Thread {
         public void run() {
             Utilities.enableWorldsSaving(server ,true);
             OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupDone);
-            PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
+            if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
+                PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
+            if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
+                PlayerHelper.sendMessageToAdmins(OBConfig.TEXT.msgBackupDone);
             OpenBackupServerEventHandler.isRunning = false;
         }
     }

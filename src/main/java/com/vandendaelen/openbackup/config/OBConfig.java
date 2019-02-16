@@ -1,5 +1,6 @@
 package com.vandendaelen.openbackup.config;
 
+import com.vandendaelen.openbackup.utils.EnumBroadcast;
 import com.vandendaelen.openbackup.utils.Reference;
 import net.minecraftforge.common.config.Config;
 
@@ -49,5 +50,9 @@ public class OBConfig {
         @Config.LangKey("config.prop.sizetokeep")
         @Config.Comment("Max weight of the openbackup folder in MB")
         public int maxSizeBackupFolder = 30720;
+
+        @Config.LangKey("config.prop.broadcast")
+        @Config.Comment("Enable the message's broadcast when the backup start/done")
+        public EnumBroadcast broadcast = EnumBroadcast.ALL;
     }
 }

@@ -49,8 +49,10 @@ public class CommandBackup extends CommandBase {
 
         switch (subcommands.indexOf(args[0])){
             case 0:{ //backup
-                if (!OpenBackupServerEventHandler.isRunning)
+                if (!OpenBackupServerEventHandler.isRunning) {
+                    sender.sendMessage(new TextComponentString("Backup started, check server's log for more info"));
                     OpenBackupServerEventHandler.startBackup();
+                }
                 else
                     sender.sendMessage(new TextComponentString("Backup already running"));
                 break;

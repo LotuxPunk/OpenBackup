@@ -5,6 +5,7 @@ import com.vandendaelen.openbackup.config.OBConfig;
 import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.threads.ThreadBackup;
 import com.vandendaelen.openbackup.threads.ThreadRestore;
+import com.vandendaelen.openbackup.utils.EnumBroadcast;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
@@ -23,7 +24,10 @@ public class OpenBackupServerEventHandler {
     public static void startBackup(){
         isRunning = true;
         OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupStarted);
-        PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
+        if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
+            PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
+        if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
+            PlayerHelper.sendMessageToAdmins(OBConfig.TEXT.msgBackupStarted);
 
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
         Utilities.enableWorldsSaving(server,false);
