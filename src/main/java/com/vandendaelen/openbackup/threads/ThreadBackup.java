@@ -29,6 +29,7 @@ public class ThreadBackup extends Thread {
             Utilities.enableWorldsSaving(server ,true);
             OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupDone);
             PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
+            OpenBackupServerEventHandler.isRunning = false;
         }
     }
 }

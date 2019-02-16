@@ -1,6 +1,5 @@
 package com.vandendaelen.openbackup.command;
 
-import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.helpers.BackupHelper;
 import com.vandendaelen.openbackup.helpers.FileHelper;

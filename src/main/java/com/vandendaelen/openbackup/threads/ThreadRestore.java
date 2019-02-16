@@ -37,7 +37,6 @@ public class ThreadRestore extends Thread {
             if (sender instanceof EntityPlayerMP)
                 sender.sendMessage(new TextComponentString(OBConfig.TEXT.msgUnzip));
             OpenBackup.LOGGER.info(OBConfig.TEXT.msgUnzip);
-            OpenBackupServerEventHandler.isRunning = false;
         }
     }
 }
