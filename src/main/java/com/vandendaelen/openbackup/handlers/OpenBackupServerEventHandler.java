@@ -22,11 +22,11 @@ public class OpenBackupServerEventHandler {
 
     public static void startBackup(){
         isRunning = true;
-        OpenBackup.LOGGER.info(OBConfig.msgBackupStarted);
-        if (OBConfig.broadcast == EnumBroadcast.ALL.getValue())
-            PlayerHelper.sendMessageToEveryone(OBConfig.msgBackupStarted);
-        if (OBConfig.broadcast == EnumBroadcast.OP.getValue())
-            PlayerHelper.sendMessageToAdmins(OBConfig.msgBackupStarted);
+        OpenBackup.LOGGER.info(OBConfig.getMsgBackupStarted());
+        if (OBConfig.getBroadcast() == EnumBroadcast.ALL.getValue())
+            PlayerHelper.sendMessageToEveryone(OBConfig.getMsgBackupStarted());
+        if (OBConfig.getBroadcast() == EnumBroadcast.OP.getValue())
+            PlayerHelper.sendMessageToAdmins(OBConfig.getMsgBackupStarted());
 
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
         Utilities.enableWorldsSaving(server,false);

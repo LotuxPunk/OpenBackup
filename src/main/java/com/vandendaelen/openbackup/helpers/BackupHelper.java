@@ -29,7 +29,7 @@ public class BackupHelper {
 
     private static void deleteOldBackups(File backupDir){
         Path dirPath = backupDir.toPath();
-        long maxFolderSize = (long) OBConfig.maxSizeBackupFolder * 1024 * 1024;
+        long maxFolderSize = (long) OBConfig.getMaxSizeBackupFolder() * 1024 * 1024;
 
         List<Path> files = getFileList(dirPath);
         long folderSize = getSizeOfFileList(files);
@@ -43,7 +43,7 @@ public class BackupHelper {
             return 0;
         });
 
-        while (files.size() > OBConfig.fileToKeep || folderSize > maxFolderSize) {
+        while (files.size() > OBConfig.getFiletokeep() || folderSize > maxFolderSize) {
             Path path = files.get(0);
             files.remove(path);
             folderSize -= path.toFile().length();
