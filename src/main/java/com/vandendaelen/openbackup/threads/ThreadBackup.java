@@ -29,9 +29,9 @@ public class ThreadBackup extends Thread{
         public void run() {
             Utilities.enableWorldsSaving(server ,true);
             OpenBackup.LOGGER.info(OBConfig.msgBackupDone);
-            if (OBConfig.broadcast == EnumBroadcast.ALL)
+            if (OBConfig.broadcast == EnumBroadcast.ALL.getValue())
                 PlayerHelper.sendMessageToEveryone(OBConfig.msgBackupDone);
-            if (OBConfig.broadcast == EnumBroadcast.ALL)
+            if (OBConfig.broadcast == EnumBroadcast.OP.getValue())
                 PlayerHelper.sendMessageToAdmins(OBConfig.msgBackupDone);
             OpenBackupServerEventHandler.isRunning = false;
         }

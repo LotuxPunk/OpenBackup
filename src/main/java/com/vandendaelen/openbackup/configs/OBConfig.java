@@ -1,7 +1,6 @@
 package com.vandendaelen.openbackup.configs;
 
 
-import com.vandendaelen.openbackup.utils.EnumBroadcast;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -24,7 +23,7 @@ public class OBConfig {
     public static boolean enable = true;
     public static boolean backupOnStart = true;
     public static int maxSizeBackupFolder = 30720;
-    public static EnumBroadcast broadcast = EnumBroadcast.ALL;
+    public static int broadcast = 1;
 
     public static void load(){
         timer = SERVER.timer.get();
@@ -51,21 +50,53 @@ public class OBConfig {
         public ForgeConfigSpec.BooleanValue enable;
         public ForgeConfigSpec.BooleanValue backupOnStart;
         public ForgeConfigSpec.IntValue maxSizeBackupFolder;
-        public ForgeConfigSpec.ConfigValue<EnumBroadcast> broadcast;
+        public ForgeConfigSpec.IntValue broadcast;
 
         public ServerConfig(ForgeConfigSpec.Builder builder) {
             builder.push("general");
-            timer = builder.comment("In minute").translation("config.timer.backup").defineInRange("timer",30,1,Integer.MAX_VALUE);
-            msgBackupStarted = builder.translation("config.msg.started").define("msgBackupStarted", "[OpenBackup] Server backup - Started");
-            msgBackupDone = builder.translation("config.msg.done").define("msgBackupDone","[OpenBackup] Server backup - Done");
-            msgUnzip = builder.translation("config.msg.unzip").define("msgUnzip", "[OpenBackup] The backup is unziped in openbackup/restore");
-            dynamicWorldName = builder.comment("Dynamicaly detect the world name ?").translation("config.prop.worldname.dynamic").define("dynamic",true);
-            worldName = builder.comment("If dynamicWorldName == false, select the world name").translation("config.prop.worldname").define("worldname","world");
-            filetokeep = builder.comment("Number files to keep").translation("config.prop.filetokeep").defineInRange("fileToKeep",15, 1,Integer.MAX_VALUE);
-            enable = builder.comment("Enable auto-backup").translation("config.prop.enable").define("enable", true);
-            backupOnStart = builder.comment("Enable backup at the server start").translation("config.prop.backup_start").define("backupOnStart", true);
-            maxSizeBackupFolder = builder.comment("Max weight of the openbackup folder in MB").translation("config.prop.sizetokeep").defineInRange("maxSizeBackupFolder",30720, 1024, Integer.MAX_VALUE);
-            broadcast = builder.comment("Enable the message's broadcast when the backup start/done").translation("config.prop.broadcast").defineEnum("broadcast",EnumBroadcast.ALL);
+            timer = builder
+                    .comment("In minute")
+                    .translation("config.timer.backup")
+                    .defineInRange("timer",30,1,Integer.MAX_VALUE);
+            dynamicWorldName = builder
+                    .comment("Dynamicaly detect the world name ?")
+                    .translation("config.prop.worldname.dynamic")
+                    .define("dynamic",true);
+            worldName = builder
+                    .comment("If dynamicWorldName == false, select the world name")
+                    .translation("config.prop.worldname")
+                    .define("worldname","world");
+            filetokeep = builder
+                    .comment("Number files to keep")
+                    .translation("config.prop.filetokeep")
+                    .defineInRange("fileToKeep",15, 1,Integer.MAX_VALUE);
+            enable = builder
+                    .comment("Enable auto-backup")
+                    .translation("config.prop.enable")
+                    .define("enable", true);
+            backupOnStart = builder
+                    .comment("Enable backup at the server start")
+                    .translation("config.prop.backup_start")
+                    .define("backupOnStart", true);
+            maxSizeBackupFolder = builder
+                    .comment("Max weight of the openbackup folder in MB")
+                    .translation("config.prop.sizetokeep")
+                    .defineInRange("maxSizeBackupFolder",30720, 1024, Integer.MAX_VALUE);
+            builder.pop();
+            builder.push("messages");
+            msgBackupStarted = builder
+                    .translation("config.msg.started")
+                    .define("msgBackupStarted", "[OpenBackup] Server backup - Started");
+            msgBackupDone = builder
+                    .translation("config.msg.done")
+                    .define("msgBackupDone","[OpenBackup] Server backup - Done");
+            msgUnzip = builder
+                    .translation("config.msg.unzip")
+                    .define("msgUnzip", "[OpenBackup] The backup is unziped in openbackups/restore");
+            broadcast = builder
+                    .comment("Enable the message's broadcast when the backup start/done. 1 - ALL, 2 - OP, 3- NONE")
+                    .translation("config.prop.broadcast")
+                    .defineInRange("broadcast",1,1,3);
             builder.pop();
         }
     }

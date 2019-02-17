@@ -23,9 +23,9 @@ public class OpenBackupServerEventHandler {
     public static void startBackup(){
         isRunning = true;
         OpenBackup.LOGGER.info(OBConfig.msgBackupStarted);
-        if (OBConfig.broadcast == EnumBroadcast.ALL)
+        if (OBConfig.broadcast == EnumBroadcast.ALL.getValue())
             PlayerHelper.sendMessageToEveryone(OBConfig.msgBackupStarted);
-        if (OBConfig.broadcast == EnumBroadcast.ALL)
+        if (OBConfig.broadcast == EnumBroadcast.OP.getValue())
             PlayerHelper.sendMessageToAdmins(OBConfig.msgBackupStarted);
 
         MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
