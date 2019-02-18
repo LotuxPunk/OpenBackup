@@ -31,7 +31,7 @@ public class ThreadBackup extends Thread {
             OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupDone);
             if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
                 PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupDone);
-            if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
+            if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.OP)
                 PlayerHelper.sendMessageToAdmins(OBConfig.TEXT.msgBackupDone);
             OpenBackupServerEventHandler.isRunning = false;
         }

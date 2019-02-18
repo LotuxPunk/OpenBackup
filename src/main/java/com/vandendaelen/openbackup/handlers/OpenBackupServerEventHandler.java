@@ -26,7 +26,7 @@ public class OpenBackupServerEventHandler {
         OpenBackup.LOGGER.info(OBConfig.TEXT.msgBackupStarted);
         if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
             PlayerHelper.sendMessageToEveryone(OBConfig.TEXT.msgBackupStarted);
-        if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.ALL)
+        if (OBConfig.PROPERTIES.broadcast == EnumBroadcast.OP)
             PlayerHelper.sendMessageToAdmins(OBConfig.TEXT.msgBackupStarted);
 
         MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
