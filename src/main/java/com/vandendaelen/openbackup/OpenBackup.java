@@ -1,5 +1,6 @@
 package com.vandendaelen.openbackup;
 
+import com.vandendaelen.openbackup.commands.CommandOpenBackup;
 import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.Reference;
@@ -34,6 +35,7 @@ public class OpenBackup {
 
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
+        CommandOpenBackup.register(event.getCommandDispatcher());
         //Directory things
         File file = ServerLifecycleHooks.getCurrentServer().getDataDirectory();
         OpenBackupServerEventHandler.DIR_PATH = new File(file, "openbackups").getAbsolutePath();

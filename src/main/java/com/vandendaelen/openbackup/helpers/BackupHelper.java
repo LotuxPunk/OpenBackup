@@ -4,9 +4,7 @@ import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.ZipUtils;
-import javafx.geometry.Side;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.io.File;

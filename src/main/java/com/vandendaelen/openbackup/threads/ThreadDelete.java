@@ -2,8 +2,7 @@ package com.vandendaelen.openbackup.threads;
 
 import com.vandendaelen.openbackup.OpenBackup;
 import com.vandendaelen.openbackup.helpers.FileHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.command.CommandSource;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 
@@ -11,14 +10,15 @@ import java.io.File;
 
 public class ThreadDelete extends Thread {
     private File fileToDelete;
-    //private Entity sender;
+    private CommandSource sender;
     private boolean isDeleted;
     private MinecraftServer server;
 
-    public ThreadDelete(File file, MinecraftServer server) {
+    public ThreadDelete(File file, MinecraftServer server, CommandSource source) {
         super("OpenBackup_Delete");
         this.fileToDelete = file;
         this.server = server;
+        this.sender = source;
         this.isDeleted = false;
     }
 
@@ -44,9 +44,7 @@ public class ThreadDelete extends Thread {
 
         private void sendInfo(String message){
             OpenBackup.LOGGER.info(message);
-//            if (sender instanceof EntityPlayer){
-//                sender.sendMessage(new TextComponentString(message));
-//            }
+            sender.sendFeedback(new TextComponentString(message), true);
         }
     }
 }
