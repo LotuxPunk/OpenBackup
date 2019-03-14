@@ -6,19 +6,34 @@ import com.vandendaelen.openbackup.helpers.PlayerHelper;
 import com.vandendaelen.openbackup.threads.ThreadBackup;
 import com.vandendaelen.openbackup.threads.ThreadRestore;
 import com.vandendaelen.openbackup.utils.EnumBroadcast;
+import com.vandendaelen.openbackup.utils.Reference;
+import com.vandendaelen.openbackup.utils.Timer;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+@Mod.EventBusSubscriber(modid = Reference.MODID)
 public class OpenBackupServerEventHandler {
     public static boolean isRunning = false;
     public static String DIR_PATH = "";
     public static String worldName = "";
     public static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event){
+        if (event.phase == TickEvent.Phase.START){
+            if (!isRunning && Timer.getInstance().update()){
+                startBackup();
+            }
+        }
+    }
 
     public static void startBackup(){
         isRunning = true;

@@ -4,6 +4,7 @@ import com.vandendaelen.openbackup.commands.CommandOpenBackup;
 import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.Reference;
+import com.vandendaelen.openbackup.utils.Timer;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,7 +18,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
 @Mod(Reference.MODID)
 public class OpenBackup {
@@ -36,6 +36,7 @@ public class OpenBackup {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
         CommandOpenBackup.register(event.getCommandDispatcher());
+        Timer timer = new Timer(OBConfig.getTimer()*20*60);
         //Directory things
         File file = ServerLifecycleHooks.getCurrentServer().getDataDirectory();
         OpenBackupServerEventHandler.DIR_PATH = new File(file, "openbackups").getAbsolutePath();
@@ -61,7 +62,8 @@ public class OpenBackup {
         LOGGER.info("World name : "+OpenBackupServerEventHandler.worldName);
 
         //Backup loop
-        if (OBConfig.getEnable())
-            OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackup,OBConfig.getBackupOnStart() ? 1 : OBConfig.getTimer(),OBConfig.getTimer(), TimeUnit.MINUTES);
+        if (OBConfig.getEnable() && OBConfig.getBackupOnStart())
+            OpenBackupServerEventHandler.startBackup();
+        //OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackup,OBConfig.getBackupOnStart() ? 1 : OBConfig.getTimer(),OBConfig.getTimer(), TimeUnit.MINUTES);
     }
 }
