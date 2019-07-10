@@ -10,11 +10,8 @@ import com.vandendaelen.openbackup.threads.ThreadDelete;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
-import net.minecraft.command.impl.GiveCommand;
-import net.minecraft.command.impl.WhitelistCommand;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import net.minecraftforge.server.command.ForgeCommand;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -39,11 +36,11 @@ public class CommandOpenBackup {
 
     private static int backup(CommandSource source){
         if (!OpenBackupServerEventHandler.isRunning) {
-            source.sendFeedback(new TextComponentString("Backup started, check server's log for more info"), true);
+            source.sendFeedback(new StringTextComponent("Backup started, check server's log for more info"), true);
             OpenBackupServerEventHandler.startBackup();
         }
         else
-            source.sendErrorMessage(new TextComponentString("Backup already running"));
+            source.sendErrorMessage(new StringTextComponent("Backup already running"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -56,7 +53,7 @@ public class CommandOpenBackup {
         List<Path> files = BackupHelper.getFileList(new File(OpenBackupServerEventHandler.DIR_PATH).toPath());
         long folderSize = BackupHelper.getSizeOfFileList(files);
         int nbFiles = files.size();
-        source.sendFeedback(new TextComponentString(MessageFormat.format("{0} file(s), {1}MB -> ~{2}GB",nbFiles,folderSize/1024/1024,folderSize/1024/1024/1024)),true);
+        source.sendFeedback(new StringTextComponent(MessageFormat.format("{0} file(s), {1}MB -> ~{2}GB",nbFiles,folderSize/1024/1024,folderSize/1024/1024/1024)),true);
         return Command.SINGLE_SUCCESS;
     }
 

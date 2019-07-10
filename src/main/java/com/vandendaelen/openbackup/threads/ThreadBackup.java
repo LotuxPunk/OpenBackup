@@ -21,7 +21,7 @@ public class ThreadBackup extends Thread{
     @Override
     public void run() {
         BackupHelper.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
-        server.addScheduledTask(new PostBackupAction());
+        server.runAsync(new PostBackupAction());
     }
 
     private class PostBackupAction implements Runnable{

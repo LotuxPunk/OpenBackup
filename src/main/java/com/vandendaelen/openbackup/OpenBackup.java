@@ -5,7 +5,6 @@ import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.Reference;
 import com.vandendaelen.openbackup.utils.Timer;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -54,7 +53,7 @@ public class OpenBackup {
     public void onServerStarted(FMLServerStartedEvent event) {
         //WorldSave name
         if (OBConfig.getDynamicWorldName()){
-            OpenBackupServerEventHandler.worldName += ServerLifecycleHooks.getCurrentServer().getWorld(DimensionType.OVERWORLD).getWorldInfo().getWorldName();
+            OpenBackupServerEventHandler.worldName += ServerLifecycleHooks.getCurrentServer().getFolderName();
         }
         else{
             OpenBackupServerEventHandler.worldName += OBConfig.getWorldName();
