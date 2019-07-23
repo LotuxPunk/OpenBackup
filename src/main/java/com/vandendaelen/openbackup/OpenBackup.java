@@ -63,6 +63,5 @@ public class OpenBackup {
         //Backup loop
         if (OBConfig.getEnable() && OBConfig.getBackupOnStart())
             OpenBackupServerEventHandler.startBackup();
-        //OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackup,OBConfig.getBackupOnStart() ? 1 : OBConfig.getTimer(),OBConfig.getTimer(), TimeUnit.MINUTES);
     }
 }

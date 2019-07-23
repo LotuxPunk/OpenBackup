@@ -22,9 +22,6 @@ import java.util.List;
 import java.util.zip.ZipOutputStream;
 
 public class BackupHelper {
-    public static String pathToWorldSave = "";
-
-
     private static void deleteOldBackups(File backupDir){
         Path dirPath = backupDir.toPath();
         long maxFolderSize = (long) OBConfig.getMaxSizeBackupFolder() * 1024 * 1024;

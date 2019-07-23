@@ -7,7 +7,7 @@ public class Reference {
     public static final String UPDATE_JSON = "https://raw.githubusercontent.com/LotuxPunk/OpenBackup/master/update.json";
 
     public static class VERSION{
-        public static final String MCVERSION = "1.14.3";
+        public static final String MCVERSION = "1.14.4";
         public static final String MAJORMOD = "0";
         public static final String MAJORAPI = "0";
         public static final String MINOR = "1";

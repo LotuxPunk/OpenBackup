@@ -16,15 +16,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-
 @Mod.EventBusSubscriber(modid = Reference.MODID)
 public class OpenBackupServerEventHandler {
     public static boolean isRunning = false;
     public static String DIR_PATH = "";
     public static String worldName = "";
-    public static final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event){
