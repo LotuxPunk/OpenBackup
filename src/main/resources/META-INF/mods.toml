@@ -6,7 +6,7 @@ authors="LotuxPunk"
 
 [[mods]] #mandatory
 modId="openbackup" #mandatory
-version="1.15.1-0.0.0.2" #mandatory
+version="1.15.2-0.0.0.3" #mandatory
 displayName="OpenBackup" #mandatory
 description='''Backup mod for MinecraftForge server & client''' #mandatory
 
@@ -20,6 +20,6 @@ description='''Backup mod for MinecraftForge server & client''' #mandatory
 [[dependencies.openbackup]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.1,]"
+    versionRange="[1.15.2,]"
     ordering="NONE"
     side="BOTH"
