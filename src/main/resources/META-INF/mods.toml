@@ -1,0 +1,25 @@
+modLoader="javafml" #mandatory
+loaderVersion="[32,)" #mandatory
+issueTrackerURL="https://github.com/LotuxPunk/OpenBackup/issues"
+displayURL="https://github.com/LotuxPunk/OpenBackup"
+authors="LotuxPunk"
+
+[[mods]] #mandatory
+modId="openbackup" #mandatory
+version="1.16.1-0.0.0.3" #mandatory
+displayName="OpenBackup" #mandatory
+description='''Backup mod for MinecraftForge server & client''' #mandatory
+
+[[dependencies.openbackup]]
+    modId="forge"
+    mandatory=true
+    versionRange="[32,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.openbackup]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.16.1]"
+    ordering="NONE"
+    side="BOTH"

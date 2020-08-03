@@ -1,13 +1,12 @@
 package com.vandendaelen.openbackup.threads;
 
 import com.vandendaelen.openbackup.OpenBackup;
-import com.vandendaelen.openbackup.config.OBConfig;
-import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
+import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.utils.ZipUtils;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.StringTextComponent;
 
 import java.io.File;
 
@@ -27,16 +26,16 @@ public class ThreadRestore extends Thread {
 
     @Override
     public void run() {
-        ZipUtils.unzip(DIR_PATH+ File.separatorChar+fileName, DIR_PATH+File.separatorChar+"restore");
-        server.addScheduledTask(new PostActionRestore());
+        ZipUtils.unzip(DIR_PATH+ File.separatorChar+fileName, DIR_PATH+ File.separatorChar+"restore");
+        server.runAsync(new PostActionRestore());
     }
 
     private class PostActionRestore implements Runnable{
         @Override
         public void run() {
-            if (sender instanceof EntityPlayerMP)
-                sender.sendMessage(new TextComponentString(OBConfig.TEXT.msgUnzip));
-            OpenBackup.LOGGER.info(OBConfig.TEXT.msgUnzip);
+            if (sender instanceof ServerPlayerEntity)
+                sender.sendMessage(new StringTextComponent(OBConfig.getMsgUnzip()), sender.getUniqueID());
+            OpenBackup.LOGGER.info(OBConfig.getMsgUnzip());
         }
     }
 }

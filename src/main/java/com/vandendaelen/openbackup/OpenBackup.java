@@ -1,46 +1,43 @@
 package com.vandendaelen.openbackup;
 
-import com.vandendaelen.openbackup.command.CommandBackup;
-import com.vandendaelen.openbackup.config.OBConfig;
+import com.vandendaelen.openbackup.commands.CommandOpenBackup;
+import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
-import com.vandendaelen.openbackup.string.OBStrings;
 import com.vandendaelen.openbackup.utils.Reference;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import com.vandendaelen.openbackup.utils.Timer;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.server.permission.DefaultPermissionLevel;
-import net.minecraftforge.server.permission.PermissionAPI;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
-@Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION.VERSION, dependencies = Reference.DEP,acceptableRemoteVersions = "*")
-public class OpenBackup
-{
-    public static Logger LOGGER;
+@Mod(Reference.MODID)
+public class OpenBackup {
+    public static final Logger LOGGER = LogManager.getLogger();
+    public static OpenBackup INSTANCE;
 
-    @EventHandler
-    public void preInit(FMLPreInitializationEvent event) {
-        LOGGER = event.getModLog();
+    public OpenBackup() {
+        INSTANCE = this;
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, OBConfig.CONFIG_SPEC);
+
+        // Register ourselves for server and other game events we are interested in
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        //Permissions
-        PermissionAPI.registerNode(OBStrings.Permission.permCmdBackup, DefaultPermissionLevel.OP, "Allows /openbackup commands");
-    }
-
-    @EventHandler
-    public void serverStarting(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandBackup());
-
+    @SubscribeEvent
+    public void onServerStarting(FMLServerStartingEvent event) {
+        CommandOpenBackup.register(event.getCommandDispatcher());
+        Timer timer = new Timer(OBConfig.getTimer()*20*60);
         //Directory things
-        File file = FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
+        File file = ServerLifecycleHooks.getCurrentServer().getDataDirectory();
         OpenBackupServerEventHandler.DIR_PATH = new File(file, "openbackups").getAbsolutePath();
         File dirFile = new File(OpenBackupServerEventHandler.DIR_PATH);
         if (!dirFile.exists()) {
@@ -52,19 +49,19 @@ public class OpenBackup
         }
     }
 
-    @EventHandler
-    public void serverStarted(FMLServerStartedEvent event) {
-        //World name
-        if (OBConfig.PROPERTIES.dynamicWorldName){
-            OpenBackupServerEventHandler.worldName += FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0).getWorldInfo().getWorldName();
+    @SubscribeEvent
+    public void onServerStarted(FMLServerStartedEvent event) {
+        //WorldSave name
+        if (OBConfig.getDynamicWorldName()){
+            OpenBackupServerEventHandler.worldName += ServerLifecycleHooks.getCurrentServer().getDataDirectory().getName();
         }
         else{
-            OpenBackupServerEventHandler.worldName += OBConfig.PROPERTIES.worldname;
+            OpenBackupServerEventHandler.worldName += OBConfig.getWorldName();
         }
         LOGGER.info("World name : "+OpenBackupServerEventHandler.worldName);
 
         //Backup loop
-        if (OBConfig.PROPERTIES.enable)
-            OpenBackupServerEventHandler.executorService.scheduleWithFixedDelay(OpenBackupServerEventHandler::startBackup,OBConfig.PROPERTIES.backupOnStart ? 1 : OBConfig.TIMER.timer,OBConfig.TIMER.timer, TimeUnit.MINUTES);
+        if (OBConfig.getEnable() && OBConfig.getBackupOnStart())
+            OpenBackupServerEventHandler.startBackup();
     }
 }

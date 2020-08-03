@@ -1,11 +1,11 @@
 package com.vandendaelen.openbackup.helpers;
 
 import com.vandendaelen.openbackup.OpenBackup;
-import com.vandendaelen.openbackup.config.OBConfig;
+import com.vandendaelen.openbackup.configs.OBConfig;
 import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.ZipUtils;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -22,10 +22,9 @@ import java.util.List;
 import java.util.zip.ZipOutputStream;
 
 public class BackupHelper {
-
     private static void deleteOldBackups(File backupDir){
         Path dirPath = backupDir.toPath();
-        long maxFolderSize = (long) OBConfig.PROPERTIES.maxSizeBackupFolder * 1024 * 1024;
+        long maxFolderSize = (long) OBConfig.getMaxSizeBackupFolder() * 1024 * 1024;
 
         List<Path> files = getFileList(dirPath);
         long folderSize = getSizeOfFileList(files);
@@ -39,7 +38,7 @@ public class BackupHelper {
             return 0;
         });
 
-        while (files.size() > OBConfig.PROPERTIES.fileToKeep || folderSize > maxFolderSize) {
+        while (files.size() > OBConfig.getFiletokeep() || folderSize > maxFolderSize) {
             Path path = files.get(0);
             files.remove(path);
             folderSize -= path.toFile().length();
@@ -55,7 +54,7 @@ public class BackupHelper {
             FileOutputStream fos = new FileOutputStream(path+File.separatorChar+ OpenBackupServerEventHandler.worldName.replace(" ", "") +"-"+dateFormat.format(date)+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
 
-            File fileToZip = new File(FMLCommonHandler.instance().getSide() == Side.CLIENT ? "saves" + File.separatorChar + sourceFile : sourceFile);
+            File fileToZip = new File(FMLEnvironment.dist == Dist.CLIENT ? "saves" + File.separatorChar + sourceFile : sourceFile);
 
             ZipUtils.zipFile(fileToZip, fileToZip.getName(), zipOut);
             zipOut.close();
