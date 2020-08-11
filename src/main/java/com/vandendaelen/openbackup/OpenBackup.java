@@ -6,12 +6,12 @@ import com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler;
 import com.vandendaelen.openbackup.utils.Reference;
 import com.vandendaelen.openbackup.utils.Timer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,9 +33,22 @@ public class OpenBackup {
     }
 
     @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
-        CommandOpenBackup.register(event.getCommandDispatcher());
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        CommandOpenBackup.register(event.getDispatcher());
         Timer timer = new Timer(OBConfig.getTimer()*20*60);
+    }
+
+    @SubscribeEvent
+    public void onServerStarted(FMLServerStartedEvent event) {
+        //WorldSave name
+        if (OBConfig.getDynamicWorldName()){
+            OpenBackupServerEventHandler.worldName += ServerLifecycleHooks.getCurrentServer().getDataDirectory().getName();
+        }
+        else{
+            OpenBackupServerEventHandler.worldName += OBConfig.getWorldName();
+        }
+        LOGGER.info("World name : "+OpenBackupServerEventHandler.worldName);
+
         //Directory things
         File file = ServerLifecycleHooks.getCurrentServer().getDataDirectory();
         OpenBackupServerEventHandler.DIR_PATH = new File(file, "openbackups").getAbsolutePath();
@@ -47,18 +60,6 @@ public class OpenBackup {
                 OpenBackup.LOGGER.info("Failed to create directory!");
             }
         }
-    }
-
-    @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event) {
-        //WorldSave name
-        if (OBConfig.getDynamicWorldName()){
-            OpenBackupServerEventHandler.worldName += ServerLifecycleHooks.getCurrentServer().getFolderName();
-        }
-        else{
-            OpenBackupServerEventHandler.worldName += OBConfig.getWorldName();
-        }
-        LOGGER.info("World name : "+OpenBackupServerEventHandler.worldName);
 
         //Backup loop
         if (OBConfig.getEnable() && OBConfig.getBackupOnStart())

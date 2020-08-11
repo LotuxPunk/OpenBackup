@@ -34,7 +34,7 @@ public class ThreadRestore extends Thread {
         @Override
         public void run() {
             if (sender instanceof ServerPlayerEntity)
-                sender.sendMessage(new StringTextComponent(OBConfig.getMsgUnzip()));
+                sender.sendMessage(new StringTextComponent(OBConfig.getMsgUnzip()), sender.getUniqueID());
             OpenBackup.LOGGER.info(OBConfig.getMsgUnzip());
         }
     }

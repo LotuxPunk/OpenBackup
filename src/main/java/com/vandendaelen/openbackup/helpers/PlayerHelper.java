@@ -11,7 +11,7 @@ public class PlayerHelper {
     public static void sendMessageToEveryone(String message){
         List<ServerPlayerEntity> players = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers();
         for (ServerPlayerEntity player:players) {
-            player.sendMessage(new StringTextComponent(message));
+            player.sendMessage(new StringTextComponent(message), player.getUniqueID());
         }
     }
 
@@ -20,7 +20,7 @@ public class PlayerHelper {
         List<ServerPlayerEntity> players = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers();
         for (ServerPlayerEntity player:players) {
             if (Arrays.asList(admins).contains(player.getDisplayName().getUnformattedComponentText()))
-                player.sendMessage(new StringTextComponent(message));
+                player.sendMessage(new StringTextComponent(message), player.getUniqueID());
         }
     }
 }
