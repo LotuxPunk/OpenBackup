@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "openbackup-fabric",
+  "version": "${version}",
+
+  "name": "Openbackup",
+  "description": "Open-source backup mod for Minecraft",
+  "authors": [
+    "LotuxPunk"
+  ],
+  "contact": {
+    "website": "https://vandendaelen.com",
+    "repo": "https://github.com/LotuxPunk/OpenBackup"
+  },
+
+  "license": "MIT",
+  "icon": "assets/openbackup-fabric/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.vandendaelen.openbackup.openbackup.client.OpenbackupFabricClient"
+    ],
+    "main": [
+      "com.vandendaelen.openbackup.openbackup.OpenbackupFabric"
+    ]
+  },
+
+          "mixins": [
+        "openbackup-fabric.mixins.json"
+      ],
+    
+  "depends": {
+    "fabricloader": ">=0.9.1+build.205",
+              "fabric": "*",
+          "minecraft": "1.16.2"
+  }
+}

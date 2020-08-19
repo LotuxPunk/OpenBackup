@@ -1,0 +1,3 @@
+rootProject.name = 'openbackup'
+
+include 'openbackup-common', 'openbackup-forge', 'openbackup-fabric'
