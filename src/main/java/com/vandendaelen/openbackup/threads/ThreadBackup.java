@@ -9,7 +9,7 @@ import com.vandendaelen.openbackup.utils.EnumBroadcast;
 import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.server.MinecraftServer;
 
-import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.DIR_PATH;
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.OPENBACKUP_DIR;
 
 public class ThreadBackup extends Thread{
     private MinecraftServer server;
@@ -20,7 +20,7 @@ public class ThreadBackup extends Thread{
 
     @Override
     public void run() {
-        BackupHelper.createBackup(DIR_PATH, OpenBackupServerEventHandler.worldName);
+        BackupHelper.createBackup(OPENBACKUP_DIR, OpenBackupServerEventHandler.worldName);
         server.runAsync(new PostBackupAction());
     }
 

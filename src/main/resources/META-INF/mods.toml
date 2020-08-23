@@ -3,6 +3,7 @@ loaderVersion="[32,)" #mandatory
 issueTrackerURL="https://github.com/LotuxPunk/OpenBackup/issues"
 displayURL="https://github.com/LotuxPunk/OpenBackup"
 authors="LotuxPunk"
+license="MIT"
 
 [[mods]] #mandatory
 modId="openbackup" #mandatory
@@ -20,6 +21,6 @@ description='''Backup mod for MinecraftForge server & client''' #mandatory
 [[dependencies.openbackup]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.1,]"
+    versionRange="[1.16.1, 1.16.2,]"
     ordering="NONE"
     side="BOTH"

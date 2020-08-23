@@ -21,6 +21,6 @@ public class FileHelper {
     }
 
     public static String[] getFilesBackupDir(){
-        return new File(OpenBackupServerEventHandler.DIR_PATH).list();
+        return new File(OpenBackupServerEventHandler.OPENBACKUP_DIR).list();
     }
 }

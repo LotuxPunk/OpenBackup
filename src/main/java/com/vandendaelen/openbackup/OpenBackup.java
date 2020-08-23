@@ -18,6 +18,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.GAME_DIR;
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.OPENBACKUP_DIR;
+
 @Mod(Reference.MODID)
 public class OpenBackup {
     public static final Logger LOGGER = LogManager.getLogger();
@@ -42,7 +45,7 @@ public class OpenBackup {
     public void onServerStarted(FMLServerStartedEvent event) {
         //WorldSave name
         if (OBConfig.getDynamicWorldName()){
-            OpenBackupServerEventHandler.worldName += ServerLifecycleHooks.getCurrentServer().getDataDirectory().getName();
+            OpenBackupServerEventHandler.worldName = ServerLifecycleHooks.getCurrentServer().func_240793_aU_().getWorldName();
         }
         else{
             OpenBackupServerEventHandler.worldName += OBConfig.getWorldName();
@@ -50,9 +53,9 @@ public class OpenBackup {
         LOGGER.info("World name : "+OpenBackupServerEventHandler.worldName);
 
         //Directory things
-        File file = ServerLifecycleHooks.getCurrentServer().getDataDirectory();
-        OpenBackupServerEventHandler.DIR_PATH = new File(file, "openbackups").getAbsolutePath();
-        File dirFile = new File(OpenBackupServerEventHandler.DIR_PATH);
+        GAME_DIR = ServerLifecycleHooks.getCurrentServer().getDataDirectory().getAbsolutePath();
+        OPENBACKUP_DIR = new File(ServerLifecycleHooks.getCurrentServer().getDataDirectory(), "openbackups").getAbsolutePath();
+        File dirFile = new File(OPENBACKUP_DIR);
         if (!dirFile.exists()) {
             if (dirFile.mkdir()) {
                 OpenBackup.LOGGER.info("Directory is created!");

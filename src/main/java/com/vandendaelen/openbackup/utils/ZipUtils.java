@@ -12,7 +12,7 @@ import java.util.zip.ZipOutputStream;
 
 public class ZipUtils {
     public static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws IOException {
-        if (fileToZip.isHidden()) {
+        if (fileToZip.isHidden() || fileToZip.getName().equals("session.lock")) {
             return;
         }
         if (fileToZip.isDirectory()) {

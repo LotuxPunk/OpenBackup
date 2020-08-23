@@ -10,7 +10,8 @@ import net.minecraft.util.text.StringTextComponent;
 
 import java.io.File;
 
-import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.DIR_PATH;
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.GAME_DIR;
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.OPENBACKUP_DIR;
 
 public class ThreadRestore extends Thread {
     private Entity sender;
@@ -26,7 +27,7 @@ public class ThreadRestore extends Thread {
 
     @Override
     public void run() {
-        ZipUtils.unzip(DIR_PATH+ File.separatorChar+fileName, DIR_PATH+ File.separatorChar+"restore");
+        ZipUtils.unzip(OPENBACKUP_DIR + File.separatorChar + fileName, GAME_DIR+ File.separatorChar + "restore");
         server.runAsync(new PostActionRestore());
     }
 

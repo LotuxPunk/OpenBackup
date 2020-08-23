@@ -51,7 +51,7 @@ public class CommandOpenBackup {
     }
 
     private static int status(CommandSource source){
-        List<Path> files = BackupHelper.getFileList(new File(OpenBackupServerEventHandler.DIR_PATH).toPath());
+        List<Path> files = BackupHelper.getFileList(new File(OpenBackupServerEventHandler.OPENBACKUP_DIR).toPath());
         long folderSize = BackupHelper.getSizeOfFileList(files);
         int nbFiles = files.size();
         source.sendFeedback(new StringTextComponent(MessageFormat.format("{0} file(s), {1}MB -> ~{2}GB",nbFiles,folderSize/1024/1024,folderSize/1024/1024/1024)),true);
@@ -59,7 +59,7 @@ public class CommandOpenBackup {
     }
 
     private static int delete(CommandSource source, String filename) {
-        File fileToDelete = new File(OpenBackupServerEventHandler.DIR_PATH + File.separatorChar + filename);
+        File fileToDelete = new File(OpenBackupServerEventHandler.OPENBACKUP_DIR + File.separatorChar + filename);
         ThreadDelete threadDelete = new ThreadDelete(fileToDelete, ServerLifecycleHooks.getCurrentServer(), source);
         threadDelete.start();
         return Command.SINGLE_SUCCESS;

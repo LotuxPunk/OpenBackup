@@ -14,12 +14,15 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.DateFormat;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
+
+import static com.vandendaelen.openbackup.handlers.OpenBackupServerEventHandler.OPENBACKUP_DIR;
 
 public class BackupHelper {
     private static void deleteOldBackups(File backupDir){
@@ -51,17 +54,25 @@ public class BackupHelper {
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             Date date = new Date();
 
-            FileOutputStream fos = new FileOutputStream(path+File.separatorChar+ OpenBackupServerEventHandler.worldName.replace(" ", "") +"-"+dateFormat.format(date)+".zip");
+            FileOutputStream fos = new FileOutputStream(OPENBACKUP_DIR + File.separatorChar + OpenBackupServerEventHandler.worldName.replace(" ", "") +"-"+dateFormat.format(date)+".zip");
             ZipOutputStream zipOut = new ZipOutputStream(fos);
 
-            File fileToZip = new File(FMLEnvironment.dist == Dist.CLIENT ? "saves" + File.separatorChar + sourceFile : sourceFile);
+            File fileToZip = null;
+            if (FMLEnvironment.dist == Dist.CLIENT){
+                fileToZip = new File(MessageFormat.format("saves\\{0}", sourceFile));
+            }
+            else{
+                fileToZip = new File(sourceFile);
+            }
 
             ZipUtils.zipFile(fileToZip, fileToZip.getName(), zipOut);
+
             zipOut.close();
             fos.close();
         }
         catch (Exception e){
             OpenBackup.LOGGER.info(e.getMessage());
+            e.printStackTrace();
         }
 
         File backupDir = new File(path);

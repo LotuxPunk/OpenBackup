@@ -19,7 +19,8 @@ import net.minecraftforge.fml.server.ServerLifecycleHooks;
 @Mod.EventBusSubscriber(modid = Reference.MODID)
 public class OpenBackupServerEventHandler {
     public static boolean isRunning = false;
-    public static String DIR_PATH = "";
+    public static String GAME_DIR = "";
+    public static String OPENBACKUP_DIR = "";
     public static String worldName = "";
 
     @SubscribeEvent
