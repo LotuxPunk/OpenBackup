@@ -19,10 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "client": [
-      "com.vandendaelen.openbackup.openbackup.client.OpenbackupFabricClient"
+      "com.vandendaelen.openbackup.client.OpenbackupFabricClient"
     ],
     "main": [
-      "com.vandendaelen.openbackup.openbackup.OpenbackupFabric"
+      "com.vandendaelen.openbackup.OpenbackupFabric"
     ]
   },
 

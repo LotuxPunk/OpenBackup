@@ -1,5 +1,7 @@
 package com.vandendaelen.openbackup;
 
+import net.fabricmc.api.ModInitializer;
+
 public class OpenbackupFabric implements ModInitializer {
     @Override
     public void onInitialize() {
