@@ -1,9 +1,10 @@
 modLoader="javafml" #mandatory
 loaderVersion="[32,)" #mandatory
+license="MIT"
 issueTrackerURL="https://github.com/LotuxPunk/OpenBackup/issues"
 displayURL="https://github.com/LotuxPunk/OpenBackup"
 authors="LotuxPunk"
-license="MIT"
+
 
 [[mods]] #mandatory
 modId="openbackup" #mandatory
