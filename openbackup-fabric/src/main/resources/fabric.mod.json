@@ -22,7 +22,7 @@
       "com.vandendaelen.openbackup.client.OpenbackupFabricClient"
     ],
     "main": [
-      "com.vandendaelen.openbackup.OpenbackupFabric"
+      "OpenBackupFabric"
     ]
   },
 
