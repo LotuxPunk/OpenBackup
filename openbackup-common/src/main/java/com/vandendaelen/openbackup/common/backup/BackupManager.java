@@ -75,8 +75,4 @@ public class BackupManager {
             //TODO : Throw Exception
         }
     }
-
-    public void setAutoBackup(boolean autoBackup) {
-        this.autoBackup = autoBackup;
-    }
 }
