@@ -34,11 +34,19 @@ public class OpenBackupForge {
                 server.getDataDirectory().getAbsoluteFile().toPath(),
                 new File(server.getDataDirectory(), "openbackup").toPath(),
                 server.func_240793_aU_().getWorldName(),
-                FMLEnvironment.dist == Dist.CLIENT
+                FMLEnvironment.dist == Dist.CLIENT,
+                () -> changeWorldsSaving(false),
+                () -> changeWorldsSaving(true)
             );
 
         //TODO : Check if enabled in config
         bm.createBackup();
+    }
+
+    private void changeWorldsSaving(boolean flag){
+        ServerLifecycleHooks.getCurrentServer().getWorlds().forEach(
+                serverWorld -> serverWorld.disableLevelSaving = !flag
+        );
     }
 
     @SubscribeEvent

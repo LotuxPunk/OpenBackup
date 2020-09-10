@@ -2,8 +2,9 @@ package com.vandendaelen.openbackup.common.backup;
 
 import com.vandendaelen.openbackup.common.threads.BackupThread;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.function.Supplier;
 
 public class BackupManager {
     private static BackupManager INSTANCE;
@@ -15,6 +16,9 @@ public class BackupManager {
     private boolean client;
     private boolean running;
     private long currentTick;
+    private boolean dirty;
+    private Runnable disableWorldSaving;
+    private Runnable enableWorldSaving;
 
     public BackupManager() {
         this.running = false;
@@ -32,13 +36,21 @@ public class BackupManager {
         return INSTANCE;
     }
 
-    public void init(int maxFileToKeep, long tickToReach, Path gameDir, Path openBackupDir, String worldname, boolean client){
+    public void init(int maxFileToKeep, long tickToReach, Path gameDir, Path openBackupDir, String worldname, boolean client, Runnable disableWorldSaving, Runnable enableWorldSaving){
         this.maxFileToKeep = maxFileToKeep;
         this.tickToReach = tickToReach;
         this.gameDir = gameDir;
         this.openBackupDir = openBackupDir;
         this.worldname = worldname;
         this.client = client;
+        this.disableWorldSaving = disableWorldSaving;
+        this.enableWorldSaving = enableWorldSaving;
+
+        try {
+            Files.createDirectory(openBackupDir);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void tick(){
@@ -60,19 +72,24 @@ public class BackupManager {
     public void createBackup(){
         if (!this.running){
             this.running = true;
-            //TODO : Disable world saving
-            BackupThread thread = new BackupThread(this.gameDir, this.openBackupDir, this.worldname, this.maxFileToKeep, this.client, new Supplier<Runnable>() {
-                @Override
-                public Runnable get() {
-                    return () -> {
-                        running = false;
-                        //TODO : Enable world saving + logging
-                    };
-                }
+            disableWorldSaving.run();
+            BackupThread thread = new BackupThread(this.gameDir, this.openBackupDir, this.worldname, this.maxFileToKeep, this.client, () -> () -> {
+                running = false;
+                enableWorldSaving.run();
             });
+
+            thread.start();
         }
         else {
             //TODO : Throw Exception
         }
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 }

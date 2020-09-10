@@ -1,6 +1,5 @@
 package com.vandendaelen.openbackup.common.threads;
 
-import com.sun.istack.internal.Nullable;
 import com.vandendaelen.openbackup.common.utils.BackupHelper;
 
 import java.nio.file.Path;
@@ -14,7 +13,7 @@ public class BackupThread extends Thread{
     private final boolean client;
     private final Supplier<Runnable> callback;
 
-    public BackupThread(Path gameDir, Path openBackupDir, String worldName, int maxFileToKeep, boolean client, @Nullable Supplier<Runnable> callback) {
+    public BackupThread(Path gameDir, Path openBackupDir, String worldName, int maxFileToKeep, boolean client, Supplier<Runnable> callback) {
         super("OpenBackup_Backup");
         this.gameDir = gameDir;
         this.openBackupDir = openBackupDir;

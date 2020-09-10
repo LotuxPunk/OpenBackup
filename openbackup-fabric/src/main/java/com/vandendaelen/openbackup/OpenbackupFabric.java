@@ -9,7 +9,7 @@ import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
 
-public class OpenBackupFabric implements ModInitializer {
+public class OpenbackupFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ServerLifecycleEvents.SERVER_STARTED.register(minecraftServer -> {
@@ -19,7 +19,9 @@ public class OpenBackupFabric implements ModInitializer {
                     minecraftServer.getRunDirectory().toPath(),
                     new File(minecraftServer.getRunDirectory(), "openbackup").toPath(),
                     minecraftServer.getSaveProperties().getLevelName(),
-                    FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT
+                    FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT,
+                    () -> minecraftServer.getWorlds().forEach(serverWorld -> serverWorld.savingDisabled = true),
+                    () -> minecraftServer.getWorlds().forEach(serverWorld -> serverWorld.savingDisabled = false)
             );
 
             BackupManager.getInstance().createBackup();
