@@ -18,6 +18,7 @@ public class OBConfig {
     public final ForgeConfigSpec.IntValue filetokeep;
     public final ForgeConfigSpec.BooleanValue enable;
     public final ForgeConfigSpec.BooleanValue backupOnStart;
+    public final ForgeConfigSpec.BooleanValue backupWhenNoPlayer;
     public final ForgeConfigSpec.IntValue maxSizeBackupFolder;
     public final ForgeConfigSpec.IntValue broadcast;
 
@@ -53,6 +54,10 @@ public class OBConfig {
                 .comment("Enable backup at the server start")
                 .translation("config.prop.backup_start")
                 .define("backupOnStart", true);
+        backupWhenNoPlayer = builder
+                .comment("Enable backup even when no player are on the server")
+                .translation("config.prop.backup_start")
+                .define("backupWhenNoPlayer", false);
         maxSizeBackupFolder = builder
                 .comment("Max weight of the openbackup folder in MB")
                 .translation("config.prop.sizetokeep")
@@ -109,6 +114,10 @@ public class OBConfig {
 
     public static boolean getBackupOnStart() {
         return CONFIG.backupOnStart.get();
+    }
+
+    public static boolean getBackupWhenNoPlayer() {
+        return CONFIG.backupWhenNoPlayer.get();
     }
 
     public static int getMaxSizeBackupFolder() {

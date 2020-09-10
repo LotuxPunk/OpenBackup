@@ -12,6 +12,7 @@ import com.vandendaelen.openbackup.utils.Utilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -22,6 +23,7 @@ public class OpenBackupServerEventHandler {
     public static String GAME_DIR = "";
     public static String OPENBACKUP_DIR = "";
     public static String worldName = "";
+    public static boolean isDirty = false;
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event){
@@ -32,19 +34,30 @@ public class OpenBackupServerEventHandler {
         }
     }
 
+    @SubscribeEvent
+    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
+        isDirty = true;
+    }
+
+    public static boolean getIsDirty(){
+        return isDirty || ServerLifecycleHooks.getCurrentServer().getCurrentPlayerCount() > 0 || ServerLifecycleHooks.getCurrentServer().isSinglePlayer();
+    }
+
     public static void startBackup(){
-        isRunning = true;
-        OpenBackup.LOGGER.info(OBConfig.getMsgBackupStarted());
-        if (OBConfig.getBroadcast() == EnumBroadcast.ALL.getValue())
-            PlayerHelper.sendMessageToEveryone(OBConfig.getMsgBackupStarted());
-        if (OBConfig.getBroadcast() == EnumBroadcast.OP.getValue())
-            PlayerHelper.sendMessageToAdmins(OBConfig.getMsgBackupStarted());
+        if (OBConfig.getBackupWhenNoPlayer() || getIsDirty()){
+            isRunning = true;
+            OpenBackup.LOGGER.info(OBConfig.getMsgBackupStarted());
+            if (OBConfig.getBroadcast() == EnumBroadcast.ALL.getValue())
+                PlayerHelper.sendMessageToEveryone(OBConfig.getMsgBackupStarted());
+            if (OBConfig.getBroadcast() == EnumBroadcast.OP.getValue())
+                PlayerHelper.sendMessageToAdmins(OBConfig.getMsgBackupStarted());
 
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        Utilities.enableWorldsSaving(server,false);
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            Utilities.enableWorldsSaving(server,false);
 
-        ThreadBackup threadBackup = new ThreadBackup(server);
-        threadBackup.start();
+            ThreadBackup threadBackup = new ThreadBackup(server);
+            threadBackup.start();
+        }
     }
 
     public static void restoreBackup(String fileName, Entity sender){

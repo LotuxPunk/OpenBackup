@@ -34,6 +34,7 @@ public class ThreadBackup extends Thread{
             if (OBConfig.getBroadcast() == EnumBroadcast.OP.getValue())
                 PlayerHelper.sendMessageToAdmins(OBConfig.getMsgBackupDone());
             OpenBackupServerEventHandler.isRunning = false;
+            OpenBackupServerEventHandler.isDirty = false;
         }
     }
 }

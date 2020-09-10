@@ -45,7 +45,7 @@ public class OpenBackup {
     public void onServerStarted(FMLServerStartedEvent event) {
         //WorldSave name
         if (OBConfig.getDynamicWorldName()){
-            OpenBackupServerEventHandler.worldName = ServerLifecycleHooks.getCurrentServer().func_240793_aU_().getWorldName();
+            OpenBackupServerEventHandler.worldName = ServerLifecycleHooks.getCurrentServer().getServerConfiguration().getWorldName();
         }
         else{
             OpenBackupServerEventHandler.worldName += OBConfig.getWorldName();
