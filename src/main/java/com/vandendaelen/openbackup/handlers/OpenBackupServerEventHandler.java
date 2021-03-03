@@ -28,7 +28,7 @@ public class OpenBackupServerEventHandler {
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event){
         if (event.phase == TickEvent.Phase.START){
-            if (!isRunning && Timer.getInstance().update()){
+            if (!isRunning && Timer.getInstance().update() && (OBConfig.getBackupWhenNoPlayer() || getIsDirty())) {
                 startBackup();
             }
         }
@@ -40,24 +40,22 @@ public class OpenBackupServerEventHandler {
     }
 
     public static boolean getIsDirty(){
-        return isDirty || ServerLifecycleHooks.getCurrentServer().getCurrentPlayerCount() > 0 || ServerLifecycleHooks.getCurrentServer().isSinglePlayer();
+        return isDirty || ServerLifecycleHooks.getCurrentServer().getCurrentPlayerCount() > 0;
     }
 
-    public static void startBackup(){
-        if (OBConfig.getBackupWhenNoPlayer() || getIsDirty()){
-            isRunning = true;
-            OpenBackup.LOGGER.info(OBConfig.getMsgBackupStarted());
-            if (OBConfig.getBroadcast() == EnumBroadcast.ALL.getValue())
-                PlayerHelper.sendMessageToEveryone(OBConfig.getMsgBackupStarted());
-            if (OBConfig.getBroadcast() == EnumBroadcast.OP.getValue())
-                PlayerHelper.sendMessageToAdmins(OBConfig.getMsgBackupStarted());
+    public static void startBackup() {
+        isRunning = true;
+        OpenBackup.LOGGER.info(OBConfig.getMsgBackupStarted());
+        if (OBConfig.getBroadcast() == EnumBroadcast.ALL.getValue())
+            PlayerHelper.sendMessageToEveryone(OBConfig.getMsgBackupStarted());
+        if (OBConfig.getBroadcast() == EnumBroadcast.OP.getValue())
+            PlayerHelper.sendMessageToAdmins(OBConfig.getMsgBackupStarted());
 
-            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            Utilities.enableWorldsSaving(server,false);
+        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+        Utilities.enableWorldsSaving(server, false);
 
-            ThreadBackup threadBackup = new ThreadBackup(server);
-            threadBackup.start();
-        }
+        ThreadBackup threadBackup = new ThreadBackup(server);
+        threadBackup.start();
     }
 
     public static void restoreBackup(String fileName, Entity sender){
