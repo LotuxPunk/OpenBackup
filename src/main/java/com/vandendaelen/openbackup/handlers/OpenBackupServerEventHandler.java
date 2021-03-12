@@ -35,7 +35,7 @@ public class OpenBackupServerEventHandler {
     }
 
     @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event){
+    public static void onPlayerLeft(PlayerEvent.PlayerLoggedOutEvent event) {
         isDirty = true;
     }
 
